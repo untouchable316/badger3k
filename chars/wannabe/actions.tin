@@ -29,6 +29,7 @@
 
 
 #action {There is no reason to 'mine' here} {spelunk};
+#action {^%* taunts you ferociously.$} {rally %1};
 
 #NOP -- COUPLE LOGIN TRIGS
 #action {unload room} {deadman 200};

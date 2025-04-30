@@ -1,0 +1,150 @@
+#class {player_aliases} {kill}
+#class {player_aliases} {open}
+
+#alias {train2} {train ambush;train assault;train chaumary;train crysknife;train desert hardening;train devices;train hide;train projectile;sw;w;s;w;nw;w;n;train litany;train pain;train prescience;train voice;train weirding
+;s;e;se;e;se;e;train bindu;train fiqh;train ilm;train nerve;train prana;w;nw;sw;d;d;ne;se;sw;d;s;train fai;train huanui;train water discipline;n;u;ne;nw;sw;u;u;ne;n;e;ne};
+
+#alias {mode1} {mode litany:some weirding attacks assault};
+#alias {mode2} {mode litany:some weirding attacks prana};
+#alias {mode3} {mode litany:some weirding attacks pain};
+#alias {mode4} {mode litany:some weirding attacks quick reflexes};
+
+
+    #if {$my[spice][status] == 1} {
+        #if {$my[spice][stored] > 0} {
+            #send !litany;
+        };
+    };
+    #if {$my[spice][status] == 2} {
+        #if {$my[spice][stored] > 0} {
+            #send !weirding;
+        };
+    };
+    #if {$my[spice][status] == 3} {
+        #if {$my[spice][stored] > 0} {
+            #send !prana;
+        };
+    };
+    #if {$my[spice][status] == 4} {
+        #if {$my[spice][stored] > 0} {
+            #send !pain;
+        };
+    };
+    #if {$my[spice][status] == 5} {
+        #if {$my[spice][stored] > 0} {
+            #send !quick reflexes;
+        };
+    };
+    #if {$my[spice][status] == 6} {
+        #if {$my[spice][stored] > 0} {
+            #send !assault;
+        };
+    };
+    #if {$my[spice][status] == 7} {
+        #if {$my[spice][stored] > 0} {
+            #send !litany;
+        };
+    };
+    #if {$my[spice][status] == 8} {
+        #if {$my[spice][stored] > 0} {
+            #send !weirding;
+        };
+    };
+    #if {$my[spice][status] == 9} {
+        #if {$my[spice][stored] > 0} {
+            #send !prana;
+        };
+    };
+    #if {$my[spice][status] == 10} {
+        #if {$my[spice][stored] > 0} {
+            #send !pain;
+        };
+    };
+    #if {$my[spice][status] == 11} {
+        #if {$my[spice][stored] > 0} {
+            #send !quick reflexes;
+        };
+    };
+    #if {$my[spice][status] == 12} {
+        #if {$my[spice][stored] > 0} {
+            #send !assault;
+        };
+    };
+    #if {$my[spice][status] == 13} {
+        #if {$my[spice][stored] > 0} {
+            #send !litany;
+        };
+    };
+    #if {$my[spice][status] == 14} {
+        #if {$my[spice][stored] > 0} {
+            #send !weirding;
+        };
+    };
+    #if {$my[spice][status] == 15} {
+        #if {$my[spice][stored] > 0} {
+            #send !prana;
+        };
+    };
+    #if {$my[spice][status] == 16} {
+        #if {$my[spice][stored] > 0} {
+            #send !pain;
+        };
+    };
+    #if {$my[spice][status] == 17} {
+        #if {$my[spice][stored] > 0} {
+            #send !quick reflexes;
+        };
+    };
+    #if {$my[spice][status] == 18} {
+        #if {$my[spice][stored] > 0} {
+            #send !assault;
+        };
+    };
+    #if {$my[spice][status] == 19} {
+        #if {$my[spice][stored] > 0} {
+            #send !litany;
+        };
+    };
+    #if {$my[spice][status] == 20} {
+        #if {$my[spice][stored] > 0} {
+            #send !weirding;
+        };
+    };
+    #if {$my[spice][status] == 21} {
+        #if {$my[spice][stored] > 0} {
+            #send !prana;
+        };
+    };
+    #if {$my[spice][status] == 22} {
+        #if {$my[spice][stored] > 0} {
+            #send !pain;
+        };
+    };
+    #if {$my[spice][status] == 23} {
+        #if {$my[spice][stored] > 0} {
+            #send !quick reflexes;
+        };
+    };
+
+
+#alias {_player_deadmanActions} {
+    #if $bot[active] {.pause;#echo {paused from deadman}};
+};
+
+#NOP -- donate water otherwise reclaim;
+#alias {fremCorpse} {
+    #if {$my[gp1][current] > $my[gp1][max] / 2} {
+        #send !fai;
+    }; #else {
+        #send !reclaim;
+    };
+};
+
+#NOP -- fill and donate literjons at shamoom;
+#alias {donate_water} {
+    acquire all;
+    fill all;
+    donate all
+};
+
+#class {player_aliases} {close}
