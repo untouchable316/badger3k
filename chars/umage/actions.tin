@@ -9,6 +9,7 @@
     };
 };
 
+#action {The creature prevents you from proceeding.} {kill demon};
 
 #NOP -- Banu Cloak;
 #action {Your cloak causes your form to phase, reducing the impact from the attack.} {

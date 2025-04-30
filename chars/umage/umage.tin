@@ -4,7 +4,7 @@
 #read chars/$user/vars.tin;
 #var theme[name] bright;
 #var my[familiar] A Baller the spherical black 8-ball;
-#var my[golem][name] blah;
+#var my[golem][name] Twenty Inch Blades;
 
 #NOP -- Load Common files;
 #NOP -- _load_3kdb_common is located in common/config.tin;
