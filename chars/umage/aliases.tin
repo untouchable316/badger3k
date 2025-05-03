@@ -8,7 +8,8 @@
      ld;
  };
 
-#NOP -- Random aliases
+#NOP -- Random aliases;
+#alias sat2 {cast explosive release};
 #alias {rcup} {eternal reload item Lord Stanley's Cup};
 #alias {dmike} {eternal duplicate creature mike bolt};
 #alias {cdd2} {cast summon config deactivate};
