@@ -1,8 +1,17 @@
 #NOP -- Set Player specific variables;
-#var user untouchable;
+#var user untfrem;
 #read chars/$user/vars.tin;
 #var guild fremen;
+#var theme[name] bright;
 
 #NOP -- Load Common files;
 #NOP -- _load_3kdb_common is located in common/config.tin;
+
+
+untouchable;shyanne;
 #read common/index.tin;
+#NOP -- Load specific modules for this character;
+#read chars/$user/ktours.tin;
+#read chars/$user/private.tin;
+#read chars/$user/actions.tin;
+#read chars/$user/aliases.tin;

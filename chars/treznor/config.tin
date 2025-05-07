@@ -31,7 +31,8 @@
      echo_divider2;
      echo_reflex_header;
      reflex_critic $dmg_spell_sp;reflex_soothe $dmg_spell_sp;
-     reflex_ma 700;reflex_ma 700;
+     reflex_ma 700;reflex_ma 700;reflex add hp <3400 soothe;
+     reflex add sp >400 cast blade dance;reflex add sp >400 cast caustic critic;
      reflex combat;
      
      echo_divider2;
@@ -54,6 +55,6 @@
           #var defs[pn] 1;
      };
      echo_divider2;
-};
+
 
 #class {player_config} {close}
