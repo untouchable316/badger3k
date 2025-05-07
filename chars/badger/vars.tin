@@ -2,15 +2,15 @@
 
 #VARIABLE {xcaption}
 {
-    {bottom} {-7}
+    {bottom} {-6}
     {left} {112}
     {top} {19}
 }
 #VARIABLE {xcaption_data}
 {
-    {1} {<088>💀 <ceb>45 <088>Corpses 💀\n C: 45 \n <fff>Eternal: <bfa>EWELL<088> <bfa>HEAL<088> <bfa>SHRED<088> <bfa>DUPE-C<088> <bfa>ENLARGE<088> <bfa>FRY<088> <bfa>PROT<088><088>}
+    {1} {<088>💀 <ceb>46 <088>Corpses 💀\n C: 46 \n <fff>Eternal: <bfa>EWELL<088> <bfa>HEAL<088> <faa>SHRED<088> <bfa>DUPE-C<088> <bfa>ENLARGE<088> <bfa>FRY<088> <bfa>PROT<088><088>}
     {2} {\n <088>Bot: <fff>OFF<088>}
-    {3} {\n <bef>Strategy:<088>}
+    {3} {\n <bef>Strategy:<088> <afa>Epowers<088> <afa>Blasts<088> <afa>Thefourwinds<088>}
 }
 #VARIABLE {xchat}
 {
@@ -29,42 +29,24 @@
     }
     {2} 
     {
-        {action} {evoke mental depletion on corpse}
+        {action} {evoke corpse drain;evoke corpse drain}
         {active} {1}
-        {name} {mDepletion}
+        {name} {cdrain2}
     }
     {3} 
-    {
-        {action} {evoke corpse drain}
-        {active} {1}
-        {name} {cdrain}
-    }
-    {4} 
     {
         {action} {divvy gold}
         {active} {1}
         {name} {divvy}
     }
-    {5} 
-    {
-        {action} {get all}
-        {active} {1}
-        {name} {getAll}
-    }
-    {6} 
-    {
-        {action} {stash all;keep all component}
-        {active} {1}
-        {name} {crafting}
-    }
-    {7} 
+    {4} 
     {
         {action} {love bear}
         {active} {1}
         {name} {ted}
     }
 }
-#VARIABLE {xcurvnum} {152}
+#VARIABLE {xcurvnum} {1}
 #VARIABLE {xdReportList}
 {
     {1} 
@@ -96,7 +78,7 @@
     }
     {4} 
     {
-        {active} {0}
+        {active} {1}
         {header_text} {XP}
         {key} {xp}
         {lookup} {tmpXP}
@@ -105,7 +87,7 @@
     }
     {5} 
     {
-        {active} {0}
+        {active} {1}
         {header_text} {% of XP}
         {key} {xp_ratio}
         {lookup} {tmpRatio}
@@ -123,7 +105,7 @@
     }
     {7} 
     {
-        {active} {0}
+        {active} {1}
         {header_text} {Dmg Dlt}
         {key} {dmg_dealt}
         {lookup} {tmpDmg}
@@ -132,7 +114,7 @@
     }
     {8} 
     {
-        {active} {0}
+        {active} {1}
         {header_text} {Dmg Rcd}
         {key} {dmg_received}
         {lookup} {tmpDmgReceived}
@@ -141,7 +123,7 @@
     }
     {9} 
     {
-        {active} {0}
+        {active} {1}
         {header_text} {Corpses}
         {key} {corpses}
         {lookup} {tmpCorpses}
@@ -161,27 +143,26 @@
     {combat_guild} {0}
     {combat_items} {0}
     {combat_numbers} {0}
-    {hpbar} {0}
+    {hpbar} {1}
 }
 #VARIABLE {xhpbar}
 {
     {bottom} {43}
-    {height} {4}
+    {height} {3}
     {prompt} 
     {
-        {1} {HP:22577/19748 SP:6625/6625 Nrg:1301/1301  C: 100/ 100  E:      %}
-        {2} {H:<006>   114%   <088> S:<008><AFA>   100%   <088> Nrg:<008><AFA>   100%   <088> C:<008><AFA>   100%   <088> E:          }
-        {3} {<839>Emit<099> : <819>9<099>  <829>Form<099>: <869>Water<099>(<819>82<099>)  <869>Rating<099>: <819>95<099>}
-        {4} {<839>Blasts/Waves/Shrouds<099>: <829>2<099>/<869>3<099>/<839>1<099>(60%)   G2N: <859>3779<099>}
+        {1} {HP:21117/21117 SP:6684/6648 NRG:1405/1405 C:100/100  E:      %}
+        {2} {H:<008><AFA>   100%   <088> S:<008><AFA>   100%   <088> NRG:<008><AFA>   100%   <088> C:<008><AFA>   100%   <088> E:          }
+        {3} {<dea>Emit<cfe>: <faa>10 <dea>Form<cfe>: <cad>Air <cfe>(<dba>98<cfe>) <bde>Rating<cfe>: <faa>165 <dea>Blasts<cfe>/<dea>Waves<cfe>: <bfc>2<cfe>/<bfc>3 <cfe>(74%) <dea>Solidify<cfe>:<088> <faa>OFF<088> <dea>G2N<cfe>: <cae>20233<088>}
     }
     {right} {166}
-    {top} {40}
+    {top} {41}
 }
 #VARIABLE {xlastBot}
 {
-    {curVnum} {9035}
-    {file} {longshadow}
-    {pause_room} {9035}
+    {curVnum} {1959}
+    {file} {mahjong}
+    {pause_room} {1959}
 }
 #VARIABLE {xmap}
 {
@@ -196,11 +177,12 @@
 #VARIABLE {xmy}
 {
     {blasts} {2}
-    {coins} {197689}
+    {coins} {336288}
     {dead} {0}
+    {drunk} {1}
     {emit} 
     {
-        {level} {9}
+        {level} {10}
     }
     {eternal} 
     {
@@ -210,19 +192,19 @@
         {fry} {1}
         {heal} {1}
         {protection} {1}
-        {shred} {1}
+        {shred} {0}
     }
     {form} 
     {
-        {size} {82}
-        {type} {Water}
+        {size} {98}
+        {type} {Air}
     }
-    {g2n} {3779}
+    {g2n} {20233}
     {gp1} 
     {
-        {current} {1301}
+        {current} {1405}
         {graph} {<008><AFA>   100%   <088>}
-        {max} {1301}
+        {max} {1405}
         {percent} {1.00}
     }
     {gp2} 
@@ -239,23 +221,24 @@
     }
     {hp} 
     {
-        {current} {22591}
-        {graph} {<006>   114%   <088>}
-        {max} {19748}
-        {percent} {1.14}
+        {current} {21117}
+        {graph} {<008><AFA>   100%   <088>}
+        {max} {21117}
+        {percent} {1.00}
     }
-    {rating} {95}
-    {reset} {60}
-    {shrouds} {1}
+    {rating} {165}
+    {reset} {74}
+    {shrouds} {2}
+    {solidify} {<faa>OFF<088>}
     {sp} 
     {
-        {current} {6625}
+        {current} {6684}
         {graph} {<008><AFA>   100%   <088>}
-        {max} {6625}
+        {max} {6648}
         {percent} {1.00}
     }
     {waves} {3}
-    {xp} {10524837074944}
+    {xp} {10581047398912}
 }
 #VARIABLE {xrolm}
 {
@@ -267,12 +250,12 @@
     {armillary} {1}
     {aurora} {1}
     {cairn} {1}
-    {charges} {198}
+    {charges} {148}
     {comet} {1}
     {crown} {1}
     {diamond} {1}
     {dove} {1}
-    {dragon} {1}
+    {dragon} {0}
     {eagle} {1}
     {eye} {1}
     {frost} {1}
@@ -281,32 +264,49 @@
     {heart} {1}
     {infinity} {1}
     {lasso} {1}
-    {last_reset} {1744427467}
+    {last_reset} {1745719549}
     {lightning} {1}
     {orrery} {1}
     {owl} {1}
     {raven} {1}
     {reaper} {1}
-    {reset_duration} {1715355116.3}
+    {reset_duration} {1716627415.5}
     {scales} {1}
     {scroll} {1}
     {skull} {1}
     {spark} {1}
-    {star} {0}
-    {t1_reset} {1744341041}
-    {type} {Mace/Mind}
+    {star} {1}
+    {t1_reset} {1745528012}
+    {type} {Sword/Fire}
     {viper} {1}
     {winch} {1}
 }
-#VARIABLE {xspiceBeers} {$xspiceBeers}
+#VARIABLE {xspiceBeers} {$spiceBeers}
 #VARIABLE {xsplit}
 {
-    {bottom} {5}
+    {bottom} {4}
     {left} {0}
     {right} {55}
     {top} {12}
 }
-#VARIABLE {xstrategyActive} {}
+#VARIABLE {xstrategyActive}
+{
+    {1} 
+    {
+        {active} {1}
+        {name} {epowers}
+    }
+    {2} 
+    {
+        {active} {1}
+        {name} {blasts}
+    }
+    {3} 
+    {
+        {active} {1}
+        {name} {thefourwinds}
+    }
+}
 #VARIABLE {xtheme}
 {
     {chatHeader} 
