@@ -143,7 +143,6 @@
 #list speedruns add {{{name} {dundee_filthy_hunter} {type} {misc} {vnum} {3205} {desc} {Dundee Swamp: Filthy Hunter}}};
 #list speedruns add {{{name} {dundee2}        {type} {misc} {vnum} {3215} {desc} {Dundee Swamp: Swamp Level 2}}};
 #list speedruns add {{{name} {dundee3}        {type} {misc} {vnum} {3219} {desc} {Dundee Swamp: Swamp Level 3}}};
-#list speedruns add {{{name} {colors}         {type} {misc} {vnum} {16530} {desc} {Night of Colors}}};
 #list speedruns add {{{name} {nut_bag}        {type} {item}{vnum} {53513}  {desc} {Forest of Charms: Nut Bag}}};
 #list speedruns add {{{name} {carebears}      {type} {area}{vnum} {36038}  {desc} {Carebears}}};
 #list speedruns add {{{name} {noheart}        {type} {mob}{vnum} {36069}  {desc} {Carebears: Noheart (SP Regen Ammy)}}};
@@ -162,6 +161,7 @@
 #list speedruns add {{{name} {winds}          {type} {mob} {vnum} {3653} {desc} {The Land: Winds (translucent gear)}}};
 #list speedruns add {{{name} {panda2}         {type} {area} {vnum} {49569} {desc} {Pandaemonium 2.0}}};
 #list speedruns add {{{name} {halo}           {type} {area} {vnum} {21481} {desc} {Halo}}};
+#list speedruns add {{{name} {tao}            {type} {area} {vnum} {21400} {desc} {Tao Te Cheng}}};
 
 #NOP -------------------------- Fantasy Speedruns ----------------------------------;
 #list speedruns add {{{name} {seal1}          {type} {area} {vnum} {4100} {desc} {Mystic Seal: Lallys Pub/Step 1}}};
@@ -300,8 +300,11 @@
 #list speedruns add {{{name} {dragon8}        {type} {mob} {vnum} {6383} {desc} {Dragon Realms: Dhulia (emerald scale)}}};
 #list speedruns add {{{name} {dragon9}        {type} {mob} {vnum} {6386} {desc} {Dragon Realms: Praedye (sapphire scale)}}};
 #list speedruns add {{{name} {dragon10}       {type} {mob} {vnum} {6304} {desc} {Dragon Realms: Ueheuh (quartz scale)}}};
-#list speedruns add {{{name} {shans}          {type} {area} {vnum} {6267} {desc} {Shansabyk's Castle}}};
+#list speedruns add {{{name} {shans}          {type} {area} {vnum} {6267} {desc} {Shansabyks Castle}}};
+#list speedruns add {{{name} {peeron}         {type} {area} {vnum} {15457} {desc} {Peerons Castle}}};
  
+
+
 #NOP -------------------------- Science Speedruns ----------------------------------;
 #list speedruns add {{{name} {ico}            {type} {mob} {vnum} {14312} {desc} {Camazots: Icodileies (Icodileies Armour)}}};
 
@@ -407,7 +410,7 @@
 #list speedruns add {{{name} {heaven}         {type} {area} {vnum} {21184} {desc} {Heaven: Portal}}};
 #list speedruns add {{{name} {taslen}         {type} {area} {vnum} {26740} {desc} {Taslen}}};
 #list speedruns add {{{name} {xeno}           {type} {mob}  {vnum} {7318}  {desc} {Xenolocles (Mortiis Mask)}}};
-#list speedruns add {{{name} {colors}         {type} {area} {vnum} {16530} {desc} {Night of Colour: Balloon Dock}}};
+#list speedruns add {{{name} {colors1}         {type} {area} {vnum} {16530} {desc} {Night of Colour: Balloon Dock}}};
 
 #list speedruns add {{{name} {sewers}         {type} {area} {vnum} {18192} {desc} {Chaos Sewers Entrance}}};
 #list speedruns add {{{name} {sewers1}        {type} {misc} {vnum} {18906} {desc} {Chaos Sewers: Bot Start Room}}};

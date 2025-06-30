@@ -25,11 +25,13 @@
 	#var ammo_buy off
 } {2};
 
-#action {%* failed to acquire a lock.} {
+#action {^%* failed to acquire a lock.$} {
+	#if $gags[combat_guild] {#line gag};
 	#math mounts[no_lock] {$mounts[no_lock] + 1};
 } {2};
 
-#action {The computer chirps 'A critical hit was scored!'} {
+#action {^The computer chirps 'A critical hit was scored!'$} {
+	#if $gags[combat_guild] {#line gag};
 	#math mounts[crit] {$mounts[crit] +1};
 } {2};
 
@@ -41,7 +43,7 @@
 } {2};
 
 #NOP -- When frenzy isn't available or is already active - toggle frenzy so we don't spam trying to use it;
-#action {There is no reason to 'frenzy' here.} {#var frenzy_toggle 0;};
+#action {There is no reason to 'frenzy' here.} {#var frenzy_toggle 0;} {2};
 #action {The computer chirps 'That person is already raged.'} {#var frenzy_toggle 0} {2};
 #action {The rage subsides.} {#var frenzy_toggle 1} {2};
 
