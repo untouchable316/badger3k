@@ -3,7 +3,16 @@
 
 #var my[hm][heal] 1;
 #var my[hm][heal_other] 1;
+#var inventory[encumberance] 0;
 
+#NOP -- Inventory;
+#action {^%*: Too heavy.$} {
+    #var inventory[encumberance] 100
+} {2};
+
+#action {^%*: Ok.$} {
+    #var inventory[encumberance] 0
+} {4};
 
 #NOP -- Hockey corpse defaults;
 #alias .hockeyCorpse {
@@ -17,8 +26,10 @@
             perform dirge
         };
     };
+    #if {"$guild" == "cyborg"} {decompose};
+    #if {"$guild" == "fremen"} {reclaim};
     #if {"$guild" == "gentech"} {recharge;reclaim};
-    #if {"$guild" == "juggernaut"} {deener;truck deener;};
+    #if {"$guild" == "juggernaut"} {deener;truck deener;fdeener};
     #if {"$guild" == "mage"} {cast corpse blast};
     #if {"$guild" == "necromancer"} {
         preserve remains;
@@ -30,11 +41,9 @@
         };
     };
     #if {"$guild" == "priest"} {offer corpse};
-    #if {"$guild" == "fremen"} {reclaim};
 };
 
 #action {^Out of nowhere a crazed hockey fan leaps towards the Cup.} {.hockeyCorpse} {1};
-
 #action {^A hockey fan sprints out and dies.$} {.hockeyCorpse} {1};
 
 #NOP -- Dead/Alive variable;
@@ -97,51 +106,73 @@
 
 #action {^%w taps you on the shoulder.$} { 
     #if !$idle_flag {
-        #format followtarget {%l} {%1}; 
-        follow $followtarget;
-        cassist $followtarget;
+        #if $toggles[emote_follow] {
+            #format followtarget {%l} {%1}; 
+            follow $followtarget;
+            cassist $followtarget;
+        };
     };
 } {2};
 
 #action {^From afar, %w stares at you in %w Jesus Christ pose.$} {
     #if !$idle_flag {
-        #format healtarget {%l} {%1}; 
-        hmheal $healtarget;
-        #action {^You need rest to use that power again.$} {tell $healtarget No, die.  Hmheal is on cooldown.} {2};
-        #delay 2 {#unaction {^You need rest to use that power again.$}};
+        #format healtarget {%l} {%1};
+        #if $toggles[emote_heal] {
+            hmheal $healtarget;
+            #action {^You need rest to use that power again.$} {tell $healtarget No, die.  Hmheal is on cooldown.} {2};
+            #delay 2 {#unaction {^You need rest to use that power again.$}};
+        } {
+            #delay tmpResponse {tell $healtarget No, die.  Hmheal is not currently being offered.} {3};
+        };
     };
 } {2};
 
 #action {^%w stares at you in %w Jesus Christ pose.$} { 
     #if !$idle_flag {
         #format healtarget {%l} {%1}; 
-        hmheal $healtarget;
-        #action {^You need rest to use that power again.$} {tell $healtarget No, die.  Hmheal is on cooldown.} {2};
-        #delay 2 {#unaction {^You need rest to use that power again.$}};
+        #if $toggles[emote_heal] {
+            hmheal $healtarget;
+            #action {^You need rest to use that power again.$} {tell $healtarget No, die.  Hmheal is on cooldown.} {2};
+            #delay 2 {#unaction {^You need rest to use that power again.$}};
+        } {
+            #delay tmpResponse {tell $healtarget No, die.  Hmheal is not currently being offered.} {3};
+        };
     };
 } {2};
 
 #action {^%w stares at you in %w best Anti-Christ pose.} {
     #if !$idle_flag {
-        #format healtarget {%l} {%1}; 
-        (heal $healtarget;
-        #action {^You must wait %* to use that ability.$} {tell $healtarget No, die.  (heal is on cooldown for another %%1.} {1};
-        #delay 2 {#unaction {^You must wait %* to use that ability.$}};
+        #format healtarget {%l} {%1};
+        #if $toggles[emote_eheal] {
+            (heal $healtarget;
+            #action {^You must wait %* to use that ability.$} {tell $healtarget No, die.  (heal is on cooldown for another %%1.} {1};
+            #delay 2 {#unaction {^You must wait %* to use that ability.$}};
+        } {
+            #delay tmpResponse {tell $healtarget No, die.  Eternal heal is not currently being offered.} {3};
+        };
     };
 } {2};
 
 #action {^From afar, %w stares at you in %w best Anti-Christ pose.} {
     #if !$idle_flag {
-        #format healtarget {%l} {%1}; 
-        (heal $healtarget;
-        #action {^You must wait %* to use that ability.$} {tell $healtarget No, die.  (heal is on cooldown for another %%1.} {1};
-        #delay 2 {#unaction {^You must wait %* to use that ability.$}};
+        #format healtarget {%l} {%1};
+        #if $toggles[emote_eheal] {
+            (heal $healtarget;
+            #action {^You must wait %* to use that ability.$} {tell $healtarget No, die.  (heal is on cooldown for another %%1.} {1};
+            #delay 2 {#unaction {^You must wait %* to use that ability.$}};
+        } {
+            #delay tmpResponse {tell $healtarget No, die.  Eternal heal is not currently being offered.} {3};
+        };
     };
 } {2};
 
 #action {^%w says, 'Greetings, Comrade!' to you.$} { 
     #if !$idle_flag {
-        #10 corpse_select
+        #if $toggles[emote_corpse] {
+            #10 corpse_select
+        } {
+            #delay tmpResponse {say Sorry, corpse sharing is not currently enabled.} {3};
+        };
     };
 } {2};
 
@@ -163,5 +194,10 @@
 
 #NOP -- Message for Pride of the Kwik-e Mart Wearing Off;
 #action {^The last of the oil leaks from your body.$} {eat pride} {2};
+
+#NOP --- Play Cult;
+#action {Gargoyle <cgame>: The remaining roles were:} {#if {$toggles[cult] && !$idle_flag} {#delay 6 {cult join}}} {2};
+#action {Gargoyle <cgame>: The remaining roles: none!} {#if {$toggles[cult] && !$idle_flag} {#delay 6 {cult join}}} {2};
+
 
 #class {default_actions} {close}

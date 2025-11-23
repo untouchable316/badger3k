@@ -1,20 +1,6 @@
 #class {player_aliases} {kill}
 #class {player_aliases} {open}
 
-#list {temp} create {};
-
-#ACTION {^%d:You will cast %w should your %w ever} {
-     #list temp set %1 {%2};
-};
-
-#alias {useHeal} {
-     #if {!$my[eternal][heal] && $my[hm][heal] && !$my[immersion][active]} {
-          hmheal;
-     };
-     #if {$my[eternal][heal] && !$my[immersion][active]} {
-          (heal oscar;
-     };
-};
 
 #NOP -- Default corpse_trig;
 #alias corpsetrig1 {
@@ -30,7 +16,7 @@
 };
 
 #alias {_player_deadmanActions} {
-    .pause;
+    #NOP;
 };
 
 #alias {setup_defense} {
@@ -78,8 +64,10 @@
      } {
           #var grasp_beads $grasps_possible;
      };
-
-     #$grasp_beads {grasp beads};
+     
+     #if {$grasp_beads > 0} {
+          #$grasp_beads {grasp beads};
+     };
 };
 
 #alias pmo {cast polymorph other on %0;};

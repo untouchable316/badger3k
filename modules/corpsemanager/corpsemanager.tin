@@ -65,13 +65,13 @@
 
 #NOP -- Inventory tracking is often inconsistent since you can use them from there.  If there are corpses in inventory,;
 #NOP -- Verify every so often that they're still there;
-#ticker corpses_inventory {
-	#if !$idle_flag {
-		#if {$corpses[inventory] > 0} {
-			check_corpses
-		};
-	};
-} {120};
+#NOP #ticker corpses_inventory {     ;
+#NOP 	#if !$idle_flag {     ;
+#NOP 		#if {$corpses[inventory] > 0} {     ;
+#NOP 			check_corpses;     ;
+#NOP 		};     ;
+#NOP 	};     ;
+#NOP } {120};     ;
 
 
 #action {You have no {corpse|remains}.} {check_corpses;} {1};
@@ -102,6 +102,10 @@
 	#5 {get all;donate all};
     #map run $donate_go_back;
     #if $bot[active] {#var bot[paused] 0;.bot};
+};
+
+#alias dcoffin2 {
+	#NOP There are no suitable corpses here to wrap!;
 };
 
 #alias cooler_rotate {
@@ -301,18 +305,34 @@
 	};
 } {2};
 
+#alias {.corpses_inventory %+1D%+1..3d} {
+	#if {"%1" == "+"} {
+		#math corpses[inventory] {$corpses[inventory] + %2};
+	};
+	#if {"%1" == "-"} {
+		#math corpses[inventory] {$corpses[inventory] - %2};
+		#if {$toggles[corpse_echo]} {#echo {<169>Inventory: -%2 corpse}};
+	};
+};
+
 
 #NOP -- Corpse Management COFFIN / FREEZER;
 #act {the coffin's protective hold!$} {#math corpses[coffin] {$corpses[coffin] + 1}} {2};
-#act {The coffin expels a corpse!} {#line gag;#echo {<169>Coffin: -1 corpse};#math corpses[coffin] {$corpses[coffin] - 1};} {2};
+#act {The coffin expels a corpse!} {#line gag;#if {$toggles[corpse_echo]} {#echo {<169>Coffin: -1 corpse}};#math corpses[coffin] {$corpses[coffin] - 1};} {2};
 #act {The coffin expels all its corpses!} {#var corpses[coffin] 0;} {2};
 #act {You picked up %d {corpse|corpses} into the coffin.} {#math corpses[coffin] {$corpses[coffin] + %1};} {2};
 #act {There are no corpses in the coffin!} {#var corpses[coffin] 0;} {2};
+
+#NOP -- coffin max assumes a large number, it'll set itself to your max;
+#var corpses[coffin_max] 99;
+#NOP -- We'll set this back to the absolute max, and when you get full message again it will reset to correct amount;
+#action {^Your coffin flashes as its capacity expands!$} {#var corpses[coffin_max] 99} {2};
+#action {^The coffin is full!$} {#var corpses[coffin_max] $corpses[coffin]} {2};
       
 
 #NOP -- Deaths Freezer;
-#act {frame causing it to get sucked in!$} {#line gag;#echo {<169>Freezer: +1 corpse};#math {corpses[freezer]} {$corpses[freezer] + 1};} {2};
-#act {^You shake the frame and out drops} {#line gag;#echo {<169>Freezer: -1 corpse};#math {corpses[freezer]} {$corpses[freezer] - 1};} {2};
+#act {frame causing it to get sucked in!$} {#line gag;#math {corpses[freezer]} {$corpses[freezer] + 1};} {2};
+#act {^You shake the frame and out drops} {#line gag;#if {$toggles[corpse_echo]} {#echo {<169>Freezer: -1 corpse}};#math {corpses[freezer]} {$corpses[freezer] - 1};} {2};
 #act {^There are no corpses in the freezer!$} {#var corpses[freezer] 0} {2};
 #act {^There is no reason to 'deslab' here.$} {#var corpses[freezer] 0;#var inventory[freezer] 0} {2};
 #act {^There is no reason to 'slab' here.$} {#var corpses[freezer] 0;#var inventory[freezer] 0} {2};
@@ -339,12 +359,12 @@
 
 #action {Your packmule gives you %*corpse%*.} {
 	#math corpses[golem] {$corpses[golem] - 1};
-	#math corpses[inventory] {$corpses[inventory] + 1};
+	.corpses_inventory +1;
 } {5};
 
 #action {Your packmule gives you %*remains%*.} {
 	#math corpses[golem] {$corpses[golem] - 1};
-	#math corpses[inventory] {$corpses[inventory] + 1};
+	.corpses_inventory +1;
 } {5};
 
 #action {Estimated Capacity: %*} {
@@ -354,7 +374,10 @@
 
 #NOP -- Corpse Management Tech Ultra-Cooler;
 #act {^You activate the Ultra-Cooler to retrieve} {#math corpses[cooler] {$corpses[cooler] - 1}} {2};
-#act {^You place the %* into the Ultra-Cooler} {#math corpses[cooler] {$corpses[cooler] + 1};#math {corpses[inventory]} {$corpses[inventory] - 1}} {2};
+#act {^You place the %* into the Ultra-Cooler} {
+	#math corpses[cooler] {$corpses[cooler] + 1};
+	.corpses_inventory -1;
+} {2};
 #act {^There is no more room in the Ultra-Cooler} {#var corpses[cooler] 50} {2};
 #act {^The cooler does not contain a corpse.$} {#var corpses[cooler] 0} {2};
 
@@ -376,10 +399,10 @@
 } {2};
 
 #NOP -- Corpse Management INVENTORY;
-#act {^You drop %* {corpse|remains}%*.$} {#math {corpses[inventory]} {$corpses[inventory] - 1};} {2};
-#act {^%* {corpse|remains}%*: Taken.} {#math {corpses[inventory]} {$corpses[inventory] + 1};} {2};
-#act {^%* {corpse|remains}%*: Ok.$} {#math {corpses[inventory]} {$corpses[inventory] + 1};} {2};
-#act {^%s%+1..d %* {corpse|remains}%*.$} {#if $corpse_check {#math {corpses[inventory]} {$corpses[inventory] + %2};};} {2};
+#act {^You drop %* {corpse|remains}%*.$} {.corpses_inventory -1} {2};
+#act {^%* {corpse|remains}%*: Taken.} {.corpses_inventory +1} {2};
+#act {^%* {corpse|remains}%*: Ok.$} {.corpses_inventory +1} {2};
+#act {^%s%+1..d %* {corpse|remains}%*.$} {#if $corpse_check {.corpses_inventory +%2}} {2};
 #act {%*Encumberance%s\[%s%d\/%s%d|%*%\|%s%dc]%*} {
 	#if $corpse_check {
 		#if {%9 != $corpses[inventory]} {
@@ -425,13 +448,77 @@
 #act {^> %* corpse%*} {#math {corpses[smuggle]} {$corpses[smuggle] + 1}} {2};
 #act {^You smuggle away: %* corpse%*} {
 	#math {corpses[smuggle]} {$corpses[smuggle] + 1};
-	#math {corpses[inventory]} {$corpses[inventory] - 1};
+	.corpses_inventory -1;
 } {2};
 
 #act {^You unsmuggle: %* corpse%*} {
 	#math {corpses[smuggle]} {$corpses[smuggle] - 1};
-	#math {corpses[inventory]} {$corpses[inventory] + 1};
+	.corpses_inventory +1;
 } {2};
 
+
+#NOP -- Corpse Use Trackers;
+#NOP -- The goal is to see how many corpses you're using to sustain combat - so we'll only track what;
+#NOP -- is being consumed during combat;
+#alias .corpseRecord {
+    #if $incombat {
+        #if $hockey_corpse {
+                #var hockey_corpse 0;
+        } {
+            #math mob[corpses_used] {$mob[corpses_used] + 1};
+        };
+    };
+};
+
+#if {"$guild" == "mage"} {
+    #action {The corpse explodes in a violent burst of energy!} {.corpseRecord} {2};
+};
+
+#if {"$guild" == "bard"} {
+    #action {You play a death dirge for the fallen corpse.  The corpse slowly crumbles} {.corpseRecord} {2};
+};
+
+#if {"$guild" == "juggernaut"} {
+    #action {Your computer drains the nutrients from the body and converts it into} {
+        .corpseRecord
+    } {2};
+};
+
+#if {"$guild" == "elemental"} {
+    #action {You envelop the corpse in your elemental energies.} {
+        .corpseRecord
+    } {2};
+};
+
+#if {"$guild" == "gentech"} {
+    #NOP -- Gentech is handled in the gentech actions since you need to recharge after reclaiming;
+};
+
+#if {"$guild" == "necromancer"} {
+    #action {You quickly dissipate the corpse and restore your magical energy.} {
+        .corpseRecord
+    } {2};
+    #action {With a gesture, you absorb the corpse and recover your magical health.} {
+        .corpseRecord
+    } {2};
+    #action {The magical energies flow through you as you absorb the rotting flesh.} {
+        .corpseRecord
+    } {2};
+    #action {Melting the corpse's skin away, you extract the magical energies within.} {
+        .corpseRecord
+    } {2};
+    #action {The corpse explodes as you extract its energy to heal your magical powers.} {
+        .corpseRecord
+    } {2};
+    #action {Just as the corpse goes *POOF*, you suck in its magical residue.} {
+        .corpseRecord
+    } {2};
+    #action {As you suck the life force from the corpse, your magical levels rise.} {
+        .corpseRecord
+    } {2};
+    #action {You crush the corpse and draw forth the magical energies from within it.} {
+        .corpseRecord
+    } {2};
+};
 
 #class {corpse_manager} {close}

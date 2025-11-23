@@ -96,12 +96,16 @@
 		#VAR {enemy} {};
 		#var enemy[name] %1;
 
-		#nop -- Try to lowercase the name and replace the articles with blanks to get a "target";
-		#format enemy[target] {%l} {%1};
-		#replace enemy[target] {\ba\b} {};
-		#replace enemy[target] {\ban\b} {};
-		#replace enemy[target] {\bthe\b} {};
-		#format enemy[target] {%p} {$enemy[target]};
+		#if $vaf[numbers] {
+			#var enemy[target] {$enemy[name_numbers]};
+		} {
+			#nop -- Try to lowercase the name and replace the articles with blanks to get a "target";
+			#format enemy[target] {%l} {%1};
+			#replace enemy[target] {\ba\b} {};
+			#replace enemy[target] {\ban\b} {};
+			#replace enemy[target] {\bthe\b} {};
+			#format enemy[target] {%p} {$enemy[target]};
+		};
 	} {
 		#var {enemy[last][name]} {$enemy[name]};
 		#VAR {enemy[name]} {};
@@ -122,6 +126,7 @@
 			#CASE {"bard"}			{.mipProcessGlineBard {%1}};
 			#CASE {"breed"}			{#if $processBreedGline {.mipProcessGlineBreed {%1}}};
 			#CASE {"changeling"}	{.mipProcessGlineChangeling {%1}};
+			#CASE {"cyborg"}		{.mipProcessGlineCyborg {%1}};
 			#CASE {"elemental"}		{.mipProcessGlineElemental {%1}};
 			#CASE {"fremen"}        {.mipProcessGlineFremen {%1}};
 			#CASE {"gentech"}		{.mipProcessGlineGentech {%1}};
@@ -160,6 +165,26 @@
 		#ECHO {<171> Invalid Gline Number <088>}
 	}
 };
+
+#ALIAS {.mipProcessGlineCyborg} {
+    #IF {%1 == 1} {
+        #regex {$mip[gline][1]} {ND:> <yYes%%} {
+            #var my[nanos][available] Yes;
+            #var tmpReg &1;
+            #regex $tmpReg {><g[><y%d} {#var my[nanos][reset] &&1};
+        };
+        #regex {$mip[gline][1]} {ND:> <yNo%%} {
+            #var my[nanos][available] No;
+            #var tmpReg &1;
+            #regex $tmpReg {><g[><y%d} {#var my[nanos][reset] &&1};
+        };
+    }; #ELSEIF {%1 == 2} {
+        #NOP;
+    }; #ELSE {
+        #ECHO {<171> Invalid Gline Number <088>};
+    }
+};
+
 
 #ALIAS {.mipProcessGlineMage} {
 	#NOP -- DISABLED PARTIALLY BUT LEAVE THE CODE IN CASE ITS FIXED;
@@ -251,9 +276,9 @@
         #math {my[gxp][rounds_tracked]} {$total_rounds - $my[gxp][starting_round]};
         #math {my[gxp][average]} {$my[gxp][total] / $my[gxp][rounds_tracked]};
         #math {my[gxp][average_per_hr]} {$my[gxp][average] * 30 * 60};
-        #format {my[gxp][str_average_per_hr]} {%M} {$my[gxp][average_per_hr]};
         #format {my[gxp][str_total]} {%M} {$my[gxp][total]};
         #format {my[gxp][str_total]} {%p} {$my[gxp][str_total]};
+		#format my[gxp][str_average_per_rnd] {%g} {$my[gxp][average_per_rnd]};
         #format my[gxp][str_rounds] {%g} {$my[gxp][rounds_tracked]};
         .gxp_time;
 	}; #ELSEIF {%1 == 2} {

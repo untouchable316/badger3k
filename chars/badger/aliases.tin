@@ -9,7 +9,136 @@
     };
 };
 
-#alias {1} {
+#NOP -- minining;
+#alias {mine1} {
+    mine voidstone phasemetal chaostone
+};
+
+#alias {mine2} {
+    mine adamantium obsidian nethernium voidstone phasemetal chaostone
+};
+
+#NOP -- unstash all the jewels i collect/use;
+#alias {ustash1} {
+    unstash2 all emerald;
+    unstash2 all emerald dust;
+    unstash2 all diamond;
+    unstash2 all diamond dust;
+    unstash2 all sapphire;
+    unstash2 all sapphire dust;
+    unstash2 all ruby;
+    unstash2 all ruby dust;
+    unstash2 all pearl;
+    unstash2 all opal dust;
+    unstash2 all cancer's tears;
+};
+
+#NOP -- unstash all frags/essence/hearts;
+#alias {ustash2} {
+    unstash2 all fragment;
+    unstash2 all essence;
+    unstash2 all heart;
+};
+
+#NOP -- unstash ore and prospect ore;
+#alias {ore1} {
+    unstash2 all ore;
+    unstash2 all ore;
+    unstash2 all ore;
+    #50 prospect ore;
+    #delay 2 {stash all};
+};
+
+#NOP -- gems/jewels/hearts/essence's that i collect/use;
+#alias {craftstuff} {
+    #echo {<fba>====================================== <088>};
+    #echo {<caf>Gems I use most often: <088>};
+    #echo {<bea>major insight <fff>- +9 wis <088>};
+    #echo {<efb>Jewels: <cdd>emerald, emerald dust <088>};
+    #echo {<efb>Heart: <cdd>heart of soul <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>major smarts <fff>- +9 int <088>};
+    #echo {<efb>Jewels: <cdd>diamond, diamond dust <088>};
+    #echo {<efb>Heart: <cdd>heart of shadow <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<caf>Other good gem options: <088>};
+    #echo {<bea>major agent <fff>- +5 str/wis <088>};
+    #echo {<efb>Jewels: <cdd>sapphire, sapphire dust <088>};
+    #echo {<efb>Heart: <cdd>heart of compassion <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>major abbot <fff>- +5 wis/cha <088>};
+    #echo {<efb>Jewels: <cdd>ruby, ruby dust <088>};
+    #echo {<efb>Heart: <cdd>heart of destruction <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>major scholar <fff>- +5 int/wis <088>};
+    #echo {<efb>Jewels: <cdd>diamond, diamond dust <088>};
+    #echo {<efb>Heart: <cdd>heart of soul <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>major jackal <fff>- +5 int/con <088>};
+    #echo {<efb>Jewels: <cdd>sapphire, sapphire dust <088>};
+    #echo {<efb>Heart: <cdd>heart of ascension <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>major despot <fff>- +4 int/wis/cha <088>};
+    #echo {<efb>Jewels: <cdd>ruby, ruby dust <088>};
+    #echo {<efb>Heart: <cdd>heart of knowledge <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>standard exessive health and spirit <fff>- overmax hp/sp regen <088>};
+    #echo {<efb>Jewels: <cdd>pearl, opal dust <088>};
+    #echo {<efb>Essence: <cdd>essence of knowledge <088>};
+    #echo {<fba>-------------------------------------- <088>};
+    #echo {<bea>major exessive health and spirit <fff>- overmax hp/sp regen <088>};
+    #echo {<efb>Jewels: <cdd>cancers tears, ruby dust <088>};
+    #echo {<efb>Heart: <cdd>heart of knowledge <088>};
+    #echo {<fba>====================================== <088>};
+};
+
+#NOP -- view all 3kdb reports/trackers;
+#alias {ds} {
+    3kReport;
+    istats;
+    dstats
+};
+
+#NOP -- smuggle stuff before fighting durantalist;
+#alias {smug1} {
+    unkeep all materials;
+    unkeep all torch;
+    #2 unlight torch;
+    unkeep all key;
+    unkeep cup;
+    #2 smuggle materials;
+    #2 smuggle torch;
+    #4 smuggle key;
+    smuggle cup;
+    unkeep all bag;
+    drop all;
+    drop 50000 coins;
+};
+
+#alias {smug2} {
+    #2 smuggle remove materials;
+    #2 smuggle remove torch;
+    #4 smuggle remove key;
+    smuggle remove cup;
+    keep all materials;
+    keep all torch;
+    keep all key;
+    light torch;
+    light torch 2;
+    keep cup;
+    get all;
+    keep all bag;
+};
+
+
+#NOP -- turn toggles on or off;
+#alias {togg} {
+    toggle 3kreport;
+    toggle mission;
+};
+
+#NOP -- for mapping;
+#alias {rmfix} {
     look;
     #delay 5 {
         mapWriteRoom;
@@ -29,14 +158,6 @@
 #alias {aug2} {
     remove circlet;
     wear other 2;
-};
-
-#NOP -- stanely cup;
-#alias {dcup} {
-    kill mike;
-    dc;
-    touch dove rune;
-    kill mike 1;
 };
 
 #NOP -- fill 5 literjons;
@@ -140,11 +261,14 @@
 #NOP -- configure 3kReport;
 #alias {set3kreport} {
     3kReport-clear;
+    3kReport+ killer;
+    3kReport+ rounds;
+    3kReport+ class;
     3kReport+ xp;
     3kReport+ xp_ratio;
+    3kReport+ coins;
     3kReport+ dmg_dealt;
     3kReport+ dmg_received;
-    #NOP 3kReport+ corpses;
 };
 
 #alias {3kr} {
@@ -312,12 +436,13 @@
         #NOP -- view available options;
         #case {"help"} {
             #echo {<fff>Available killmodes:<088>};
-            #echo {<eaf>No argument <bec>(2 summons defending & 2 summons assisting)<088>};
-            #echo {<eaf>2 <bec>(4 summons assisting)<088>};
-            #echo {<eaf>3 <bec>(4 summons defending)<088>};
-            #echo {<eaf>4 <bec>(3 summons assisting and 1 summon defending)<088>};
-            #echo {<eaf>5 <bec>(1 summon defending and 3 summons assisting)<088>};
-            #echo {<eaf>golem <bec>(golem assisting)<088>};
+            #echo {<eaf>No argument <bec>(2 summons defending & 2 summons assisting & golem assisting)<088>};
+            #echo {<eaf>2 <bec>(4 summons assisting & golem assisting)<088>};
+            #echo {<eaf>3 <bec>(4 summons defending & golem assisting)<088>};
+            #echo {<eaf>4 <bec>(3 summons assisting & 1 summon defending & golem assisting)<088>};
+            #echo {<eaf>5 <bec>(1 summon defending & 3 summons assisting & golem defending)<088>};
+            #echo {<eaf>golem <bec>(golem assisting with no summons - self tanking)<088>};
+            #echo {<eaf>selftank <bec>(golem assisting with 4 assisting summons - self tanking)};
         };
         #NOP -- 4 summons assisting;
         #case {"2"} {
@@ -325,7 +450,8 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 9##4#1500#70#assist#summons#always;
+            strategy shoosummons;
+            ms 10##4#1500#70#assist#summons#always;
             ms golema;
         };
         #NOP -- 4 summons defending;
@@ -334,7 +460,7 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 9##4#1500#70#defend#summons#always;
+            ms 10##4#1500#70#defend#summons#always;
             ms golema;
         };
         #NOP -- 3 summons assisting and 1 summon defending;
@@ -343,27 +469,38 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 9##3#1500#70#assist#summons#always;
-            ms 9##1#1500#70#defend#summons#always;
+            ms 10##3#1500#70#assist#summons#always;
+            ms 10##1#1500#70#defend#summons#always;
             ms golema;
         };
-        #NOP -- 1 summon defending and 3 summons assisting;
+        #NOP -- 1 summon defending and 3 summons assisting and golem defending;
         #case {"5"} {
             clear_sconfig;
             shoo;
             shoo golem;
             mystrategy-golem;
-            ms 9##1#1500#70#defend#summons#always;
-            ms 9##3#1500#70#assist#summons#always;
+            strategy shoosummons;
+            ms 10##1#1500#70#defend#summons#always;
+            ms 10##3#1500#70#assist#summons#always;
             ms golemd;
         };
         #NOP -- offensive mage - golem assisting;
         #case {"golem"} {
-            #echo {<ffa>No argument provided - running default killmode<088>};
             clear_sconfig;
             shoo;
             shoo golem;
             mystrategy;
+            strategy shoosummons;
+            ms golema;
+        };
+        #NOP -- offensive mage with summons;
+        #case {"selftank"} {
+            clear_sconfig;
+            shoo;
+            shoo golem;
+            mystrategy;
+            strategy shooshummons;
+            ms 10##4#1500#70#assist#summons#always;
             ms golema;
         };
         #NOP -- default for summoner 2 summons defending and 2 summons assisting;
@@ -373,8 +510,8 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 9##2#1500#70#defend#summons#always;
-            ms 9##2#1500#70#assist#summons#always;
+            ms 10##2#1500#70#defend#summons#always;
+            ms 10##2#1500#70#assist#summons#always;
             ms golema;
         };
         #default {
@@ -396,19 +533,37 @@
     cast summon config activate
 };
 
+#NOP -- clear defense;
+#alias {clear_defense} {
+    clear_def;
+    deplete prismatic aura;
+    deplete prismatic sphere;
+    deplete major globe;
+    deplete minor globe;
+    deplete magnificent shield;
+    deplete shield;
+    deplete armor;
+    deplete protection from evil;
+    deplete protection from good;
+    deplete rhino skin;
+    deplete stoneskin;
+    deplete blink;
+    deplete mantle;
+};
+
 #NOP -- setup defense;
 #alias {setup_defense} {
     #if {"$guild" == "mage"} {
         clear_gc;
         clear_c;
         setup_gc;
-        setup_c;
+        #NOP setup_c;
         #delay 2 {prots_armor};
         #delay 4 {prots_ms};
         #delay 6 {prots_MG};
         #delay 8 {prots_ss};
         #delay 10 {prots_mb};
-        #delay 12 {prots_pfe};
+        #delay 12 {prots_pfg};
         #delay 14 {prots_ps};
     };
     #elseif {"$guild" == "bard"} {
@@ -448,7 +603,8 @@
     cast greater contingency as major globe#cast major globe;
     cast greater contingency as stoneskin#cast stoneskin;
     cast greater contingency as shield#cast magnificent shield;
-    cast greater contingency as armor#cast armor
+    cast greater contingency as armor#cast armor;
+    cast greater contingency as protection from good#cast protection from good;
 };
 
 #NOP -- clear greater contingency;
@@ -535,7 +691,10 @@
 
 #NOP -- polymorph other (turn mobs against each other);
 #alias {pmo} {
-    cast polymorph other on %0
+    #if {"%0" == ""} {
+        cast polymorph other on $mkaTargetName;
+    }; 
+    #else {cast polymorph other on %0};
 };
 
 #NOP -- cast find familiar;
@@ -547,7 +706,7 @@
 #alias {setup_reflex} {
     #if {"$guild" == "juggernaut"} {
         reflex clear;
-        reflex add sp <50% airdrop;
+        #NOP reflex add sp <50% airdrop;
         reflex add sp <10% eternal heal badger;
         reflex add gp1 <90% transpose max;
         reflex add gp1 <5% drop pants;
@@ -561,6 +720,7 @@
         reflex add gp2 >40% cast focus mind;
         reflex add gp2 >90% shoo summons;
         reflex combat on;
+        reflex combat;
         reflex start;
     };
     #elseif {"$guild" == "elemental"} {
@@ -820,12 +980,25 @@
 
 #NOP -- toggle levitate using jumpjets;
 #alias {fly1} {
-    jumpjet
+    #if {"$guild" == "juggernaut"} {
+        jumpjet;
+    };
+    #elseif {"$guild" == "mage"} {
+        cast levitate;
+    };
+    #else {
+        #echo {<ffa>Current guild: <fff>$guild <ffa>does NOT have a guild flying command in alias!!<088>};
+    };
 };
 
 #NOP -- change attacks to another target;
 #alias {kk} {
-    retarget %0
+    #if {"$guild" == "juggernaut"} {
+        retarget %0;
+    };
+    #if {"$guild" == "mage"} {
+        mka;
+    };
 };
 
 #NOP -- guild light;
@@ -950,6 +1123,7 @@
         strategy summon_mf;
         strategy spelltap;
         strategy gstrength;
+        strategy shoosummons;
         strategy rolm;
     };
     #elseif {"$guild" == "elemental"} {
@@ -1829,6 +2003,7 @@
 #list badger3kdb add {{{name} {vigiboost-wis} {type} {boosts} {desc} {Vigilant flask boost: +15 wis}}};
 
 #NOP - combat;
+#list badger3kdb add {{{name} {clear_defense} {type} {combat} {desc} {Clear defenses}}};
 #list badger3kdb add {{{name} {setup_defense} {type} {combat} {desc} {Setup defenses}}};
 #list badger3kdb add {{{name} {mystrategy} {type} {combat} {desc} {Mystrategy: default strategy setup}}};
 #list badger3kdb add {{{name} {mystrategy-mech} {type} {combat} {desc} {Mystrategy: mech tanking}}};
@@ -1837,8 +2012,10 @@
 #list badger3kdb add {{{name} {sdmg1} {type} {combat} {desc} {summon damage report}}};
 #list badger3kdb add {{{name} {sdmg2} {type} {combat} {desc} {summon damage report for vaf numbers perk}}};
 #list badger3kdb add {{{name} {cleardmg} {type} {combat} {desc} {clear all damage trackers}}};
+#list badger3kdb add {{{name} {ds} {type} {combat} {desc} {view all 3kdb trackers}}};
 
 #NOP -- misc;
+#list badger3kdb add {{{name} {togg} {type} {misc} {desc} {Turn toggles on or off}}};
 #list badger3kdb add {{{name} {knight6} {type} {misc} {desc} {Knight tour game - 6x6: knight6 <row> <col>}}};
 #list badger3kdb add {{{name} {knight8} {type} {misc} {desc} {Knight tour game - 8x8: knight8 <row> <col>}}};
 #list badger3kdb add {{{name} {winaxe} {type} {misc} {desc} {Knight tour game - Throwing axes}}};
@@ -1870,6 +2047,12 @@
 #list badger3kdb add {{{name} {bagset} {type} {misc} {desc} {set # of bags to cycle thru}}};
 #list badger3kdb add {{{name} {info} {type} {misc} {desc} {guild info files}}};
 #list badger3kdb add {{{name} {gfinger} {type} {misc} {desc} {see guild info on other players}}};
+#list badger3kdb add {{{name} {mine1} {type} {misc} {desc} {mine: voidstone phasemetal chaostone}}};
+#list badger3kdb add {{{name} {mine2} {type} {misc} {desc} {mine: adamantium obsidian nethernium voidstone phasemetal chaostone}}};
+#list badger3kdb add {{{name} {craftstuff} {type} {misc} {desc} {gems/jewels/hearts/essence's that i collect/use}}};
+#list badger3kdb add {{{name} {ustash1} {type} {misc} {desc} {unstash all the jewels i collect/use}}};
+#list badger3kdb add {{{name} {ustash2} {type} {misc} {desc} {unstash all frags/essence/hearts}}};
+#list badger3kdb add {{{name} {ore1} {type} {misc} {desc} {unstash ore and prospect ore}}};
 
 #NOP -- guild -- juggernaut;
 #if {"$guild" == "juggernaut"} {

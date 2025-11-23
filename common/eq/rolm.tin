@@ -126,8 +126,7 @@
 #action {Divine energy dances up and down the artifact, welling with power renewed.} {
     #var rolm[t1_reset] $rolm[last_reset];
     #format rolm[last_reset] {%T};
-    #math rolm[reset_duration] { 1.0 * $rolm[last_reset] - $rolm[t1_reset] / 60};
-    #echo {ROLM RESET AFTER $rolm[reset] MINUTES};
+    #echo {<fcd> ++++++  ROLM HAS RESET  ++++++ <088>};
 } {2};
 
 #action {Upon the %* the %* glows brightly again.} {
@@ -177,6 +176,7 @@
 #action {You touch the Gremlin rune on the artifact and hear a soft *click*} {
     #var rolm[gremlin] 0;
     #line oneshot #action {The diamond rune flashes briefly on the artifact.} {
+        #var mob[gremlin] 1;
         #math rolm[charges] {$rolm[charges] - 1};
         #delay rolm_gremlin {#var rolm[gremlin] 1} 1280;
     } {1};

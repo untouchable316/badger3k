@@ -67,7 +67,7 @@
             #if $dmgtracker {.dmg_round_reset;#var cmbt[affects][convoke] 0};
 
             #NOP -- Pull data from (cstats for how much damage was received and mob class;
-            #if $eternal {_update_cstats};
+            #if $toggles[3kreport] {#if $eternal {_update_cstats}};
             .processDeathReport;
 
             #NOP -- toggle maintenance that need to fire after all corpsetrig actions if bot is not active;
@@ -120,7 +120,12 @@
     #var deathReport[damage_dealt] $mob[damage_dealt];
     #var deathReport[mob_dodges] $mob[mob_dodges];
     #var deathReport[xp_earned] $fight_xp;
+    #var deathReport[mob_attacks_melee] $defense[current_mob_attempts][melee];
+    #var deathReport[mob_attacks_special] $defense[current_mob_attempts][special];
+    #var deathReport[mob_attacks_total] $defense[current_mob_attempts][total];
+    #if {"$area" != ""} {#var deathReport[area] $area};
     #if {"$gxp[last-fight]" != ""} {#var deathReport[gxp_earned] $gxp[last-fight]};
+    #if {"$gxp[last-fight-per-round]" != ""} {#var deathReport[gxp_earned_per_round] $gxp[last-fight-per-round]};
 
     #if {"$guild" == "bard"} {
         #var deathReport[songs_lost] $cmbt[songs][lost][fight];
@@ -147,6 +152,7 @@
         #list deathSummary_rounds add {$deathReport[mob_rounds_to_kill]};
         #list deathSummary_xp_earned add {$deathReport[xp_earned]};
         #list deathSummary_gxp_earned add {$deathReport[gxp_earned]};;
+        #list deathSummary_gxp_earned_per_round add {$deathReport[gxp_earned_per_round]};;
         #list deathSummary_damage_dealt add {$deathReport[damage_dealt]};
         #list deathSummary_coins_earned add {$deathReport[coins_earned]};
         #list deathSummary_corpses_used add {$deathReport[corpses_used]};
@@ -154,13 +160,25 @@
         #list deathSummary_mob_dodges add {$deathReport[mob_dodges]};
         #list deathSummary_class add {$deathReport[class]};
         #list deathSummary_xp_to_class add {$deathReport[xp_to_class]};
+        #list deathSummary_mob_attacks_melee add {$deathReport[mob_attacks_melee]};
+        #list deathSummary_mob_attacks_specials add {$deathReport[mob_attacks_special]};
+        #list deathSummary_mob_attacks_total add {$deathReport[mob_attacks_total]};
+        
 
         #if {"$guild" == "necromancer"} {
             #list deathSummary_dsave_count add {$deathReport[dsave_count]};
             #list deathSummary_dsave_nps add {$deathReport[dsave_nps]};
         };
         
-        #if {"$guild" == "mage"} {#list deathSummary_summons_killed add {$deathReport[summons_killed]};};
+        #NOP -- Determine how much sp was spent on this fight on defensive spells;
+        #NOP -- Determine how many summons it took to tank it;
+        #if {"$guild" == "mage"} {
+            #list deathSummary_summons_killed add {$deathReport[summons_killed]};
+            .calc_defense_summary;
+            #math deathReport[sp_spent] {$totalSpCost - $deathReport[sp_spent_t1]};
+            #var deathReport[sp_spent_t1] $totalSpCost;
+            #list deathSummary_sp_spent add {$deathReport[sp_spent]};
+        };
         #if {"$guild" == "bard"} {#list deathSummary_songs_lost add {$deathReport[songs_lost]};};
         _mob_status_clear;
     };
@@ -194,11 +212,11 @@
 
 #alias corpsetrig+ {
     #if {"%0" != ""} {
-        #list corpseList {find} {%0} {tempListIndex};
+        #list corpseList {find} {%i%0} {tempListIndex};
         #var tempList $corpseList[+$tempListIndex];
         #if {&tempList[] == 0} {
             #list corpseActions indexate name;
-            #list corpseActions {find} {%0} {tempListIndex};
+            #list corpseActions {find} {%i%0} {tempListIndex};
             #var tempList $corpseList[+$tempListIndex];
         };
         #if {&tempList[] > 0} {
@@ -206,7 +224,7 @@
             #NOP -- Otherwise, if there is no corpseActions list, we add it;
             #if {&corpseActions[] > 0} {
                 #list corpseActions indexate name;
-                #list corpseActions {find} {%0} {itemExists};
+                #list corpseActions {find} {%i%0} {itemExists};
                 #if {$itemExists} {
                     #echo {<caa>----  <fff> %0 is already in the <fff>corpse_trig <caa>  ----<088>};
                 } {
@@ -251,15 +269,15 @@
             #list corpseActions indexate name;
         } {
             #list corpseActions indexate name;
-            #list corpseList {find} {%0} {tempListIndex};
+            #list corpseList {find} {%i%0} {tempListIndex};
             #var tempList $corpseList[+$tempListIndex];
             #if {&tempList[] == 0} {
-                #list corpseActions {find} {%0} {tempListIndex};
+                #list corpseActions {find} {%i%0} {tempListIndex};
                 #var tempList $corpseList[+$tempListIndex];
             };
             #if {&tempList[] > 0} {
                 #if {&corpseActions[] > 0} {
-                    #list corpseActions {find} {%0} {itemExists};
+                    #list corpseActions {find} {%i%0} {itemExists};
                     #if {$itemExists} {
                         #echo {<caa>----  <fff> %0 has been <baa>removed<088> from <fff>corpse_trig <caa>  ----<088>};
                         #list corpseActions filter {} {%0};
@@ -297,7 +315,7 @@
     #if {"%0" != ""} {
         #var foundItem 0;
         #list corpseActions indexate name;
-        #list corpseActions find {%0} {foundItem};
+        #list corpseActions {find} {%i%0} {foundItem};
         #if {$foundItem == 0} {
             #echo { <bba>$foundItem[name] was not found in the corpsetrig actions<088>};
         };
@@ -318,7 +336,7 @@
     #if {"%0" != ""} {
         #var foundItem 0;
         #list corpseActions indexate name;
-        #list corpseActions find {%0} {foundItem};
+        #list corpseActions {find} {%i%0} {foundItem};
         #if {$foundItem == 0} {
             #echo { <bba>$foundItem[name] was not found in the corpsetrig actions<088>};
         };
@@ -398,8 +416,11 @@
 #list corpseList add {{{name} {divvy} {guild} {all} {action} {divvy gold} {active} {0} {description} {Gold: Divvy gold}}};
 #list corpseList add {{{name} {coins} {guild} {all} {action} {get coins from corpse;get coins} {active} {0} {description} {Gold: Get coins from corpse}}};
 #list corpseList add {{{name} {delay} {guild} {all} {action} {#NOP} {active} {0} {description} {2 Second Delay}}};
+#list corpseList add {{{name} {delay5} {guild} {all} {action} {#NOP} {active} {0} {description} {5 Second Delay - (offline)}}};
+#list corpseList add {{{name} {delay10} {guild} {all} {action} {#NOP} {active} {0} {description} {10 Second Delay (offline)}}};
 #list corpseList add {{{name} {wrap} {guild} {all} {action} {wrap remains} {active} {0} {description} {Coffin: Wrap Corpse}}};
 #list corpseList add {{{name} {slab} {guild} {all} {action} {slab remains} {active} {0} {description} {Freezer: Slab Corpse}}};
+#list corpseList add {{{name} {cooler} {guild} {all} {action} {#if {$$corpses[cooler] < 50} {unwrap;get corpse;cooler corpse;wrap remains}} {active} {0} {description} {Cooler: Rotates to Cooler}}};
 #list corpseList add {{{name} {szCaps} {guild} {all} {action} {swallow blue capsule;swallow orange capsule} {active} {0} {description} {SZ: Eat Blue/Orange Capsules}}};
 #list corpseList add {{{name} {szGreenCap} {guild} {all} {action} {swallow green capsule} {active} {0} {description} {SZ: Eat Green Capsule}}};
 #list corpseList add {{{name} {crafting} {guild} {all} {action} {stash all;keep all component} {active} {0} {description} {Crafting: Stash All & Keep All Components}}};
@@ -408,12 +429,18 @@
 #list corpseList add {{{name} {hoarder} {guild} {all} {action} {#loop 20 1 i {put all in bag $i}} {active} {0} {description} {Hoarder: Put all in bags (20 bags)}}};
 #list corpseList add {{{name} {spoon} {guild} {all} {action} {eat corpse} {active} {0} {description} {Spoon: Eat Corpse}}};
 #list corpseList add {{{name} {cocoon} {guild} {all} {action} {fuse 100} {active} {0} {description} {Cocoon: Fuse 100hps}}};
+#list corpseList add {{{name} {cocoon500} {guild} {all} {action} {fuse 500} {active} {0} {description} {Cocoon: Fuse 500hps}}};
 
 #NOP -- bard;
 #list corpseList add {{{name} {dirge} {guild} {bard} {action} {perform dirge}  {active} {0} {description} {Bard: Perform Dirge}}};
 #list corpseList add {{{name} {dirge2} {guild} {bard} {action} {perform dirge;perform dirge} {active} {0} {description} {Bard: Perform Dirge x2}}};
 #list corpseList add {{{name} {songcease} {guild} {bard} {action} {cease} {active} {0} {description} {Bard: Cease songs}}};
 #list corpseList add {{{name} {disc} {guild} {bard} {action} {put all in disc} {active} {0} {description} {Bard: Put all in disc}}};
+
+#NOP -- Cyborg;
+#list corpseList add {{{name} {decompose} {guild} {cyborg} {action} {decompose}  {active} {0} {description} {Cyborg: Decompose}}};
+#list corpseList add {{{name} {decompose2} {guild} {cyborg} {action} {decompose} {active} {0} {description} {Cyborg: Decompose x2}}};
+
 
 #NOP -- gentech;
 #list corpseList add {{{name} {gtRepair} {guild} {gentech} {action} {gt-repair} {active} {0} {description} {Gentech: Repair/Stabilize/Tactical}}};
@@ -436,17 +463,20 @@
 #list corpseList add {{{name} {absorbSp2} {guild} {necromancer} {action} {qtrance absorb/absorb} {active} {0} {description} {Necro: Absorb Corpse for SP 2x}}};
 #list corpseList add {{{name} {conWorth} {guild} {necromancer} {action} {con} {active} {0} {description} {Necro: Contribute Coins for Worth}}};
 #list corpseList add {{{name} {reinforce} {guild} {necromancer} {action} {reinforce all} {active} {0} {description} {Necro: Reinforce/Repair Armour}}};
+#list corpseList add {{{name} {chest} {guild} {necromancer} {action} {qtrance keep all/get all/retrieve/open chest/put all in chest/close chest/deliver} {active} {0} {description} {Necro: Get all and put in chest}}};
+
 
 #NOP -- mage;
 #list corpseList add {{{name} {cBlast} {guild} {mage} {action} {cast corpse blast}  {active} {0} {description} {Mage: Corpse Blast}}};
 #list corpseList add {{{name} {cBlast2} {guild} {mage} {action} {cast corpse blast;cast corpse blast} {active} {0} {description} {Mage: Corpse Blast 2x}}};
 #list corpseList add {{{name} {spelltap} {guild} {mage} {action} {cast spell tap on corpse}  {active} {0} {description} {Mage: Spell Tap}}};
-#list corpseList add {{{name} {anchor} {guild} {mage} {action} {#if !$incombat {cast dispel magic}}  {active} {0} {description} {Mage: Dispel Magic (remove anchor)}}};
+#list corpseList add {{{name} {anchor} {guild} {mage} {action} {#if !$$incombat {cast dispel magic}}  {active} {0} {description} {Mage: Dispel Magic (remove anchor)}}};
 #list corpseList add {{{name} {spellbook} {guild} {mage} {action} {#if !$studying {study spellbook}}  {active} {0} {description} {Mage: Study Spellbook}}};
 #list corpseList add {{{name} {pPocket} {guild} {mage} {action} {put all in pocket} {active} {0} {description} {Mage: put all items in deeppocket}}};
 
 #NOP -- fremen;
 #list corpseList add {{{name} {fremcorpse} {guild} {fremen} {action} {fremCorpse} {active} {0} {description} {Fremen: fai & reclaim (Threshold is half your max gp1)}}};
+#list corpseList add {{{name} {fremcorpse2} {guild} {fremen} {action} {fremCorpse2} {active} {0} {description} {Fremen: Similar to fremcorpse, except it will fill your coffin before fai}}};
 #list corpseList add {{{name} {fai1} {guild} {fremen} {action} {fai} {active} {0} {description} {Fremen: Donate water from a corpse back to guild}}};
 #list corpseList add {{{name} {fai2} {guild} {fremen} {action} {fai;fai} {active} {0} {description} {Fremen: Donate water from a corpse back to guild x2}}};
 #list corpseList add {{{name} {reclaim1} {guild} {fremen} {action} {reclaim} {active} {0} {description} {Fremen: Recover water from a corpse}}};
@@ -457,6 +487,9 @@
 
 #NOP -- monk;
 #list corpseList add {{{name} {study} {guild} {monk} {action} {study corpse} {active} {0} {description} {Monk: Study Corpse}}};
+
+#NOP -- Psicorps;
+#list corpseList add {{{name} {psi_donate} {guild} {psicorps} {action} {#if {"$${inventory[encumberance]}" == "100"} {psi_donate}} {active} {0} {description} {Psicorps: Fold / Donate all if full}}};
 #list corpseList indexate name;
 
 

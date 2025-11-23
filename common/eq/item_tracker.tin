@@ -47,11 +47,11 @@
 
 #NOP -- Helmet of Aeonos;
 #action {The divine power of Aeonos flows through your helmet.} {
-    .trackItem {Helmet of Aeonos} heal;
+    .trackItem {Helmet of Aeonos} {heal};
 } {2};
 
 #action {The moonstones on your helmet glow softly} {
-    .trackItem {Helmet of Aeonos} dodge;
+    .trackItem {Helmet of Aeonos} {dodge};
 } {2};
 
 #action {^The sunstones embedded in your helmet flash with warmth, momentarily} {
@@ -64,6 +64,30 @@
 
 #action {^A shimmering light from the diamonds on your helmet surrounds you} {
     .trackItem {Helmet of Aeonos} {dodge};
+} {2};
+
+#NOP -- Ring of Magical Deflection (Rimalkin King);
+#action {^Your hand glows softly, and the attack dissipates!$} {
+    .trackItem {Ring of Deflection} {deflect};
+} {2};
+
+#NOP -- Rune Sword;
+#action {^%* wound causes %* to shudder in pain. \{%d\}$} {
+    #var cmbt[affects][rune_sword_green_rune] 1;
+    .trackItem {rune sword} {green rune};
+} {2};
+
+#action {^Bolts of blue electricity leap from the blade and strike %*! \{%d\}$} {
+    #var cmbt[affects][rune_sword_blue_rune] 1;
+    .trackItem {rune sword} {blue rune};
+} {2};
+
+#action {^The runesword emits a yellow glow as it causes you to strike again!$} {
+    .trackItem {rune sword} {yellow rune};
+} {2};
+
+#action {^The black rune flares and enshrouds %* with dark energy!$} {
+    .trackItem {rune sword} {black rune};
 } {2};
 
 
@@ -86,6 +110,11 @@
 #action {^Your charm bracelet brightens.$} {
     .trackItem {charm bracelet} dodge;
     blockSelfTrack item {charm bracelet};
+} {2};
+
+#NOP -- Alien Queen's Skin;
+#action {Acid from the Queen's skin sizzles %*!} {
+    .trackItem {alien skin} {acid dmg};
 } {2};
 
 #NOP -- CMC;
@@ -122,6 +151,10 @@
     .trackItem rolm {phoenix heal};
 } {2};
 
+#action {^Warm yellow energy restores your life and refreshes your psyche.$} {
+    .trackItem {rolm} {phoenix heal};
+} {2};
+
 #action {^A %* spirit of %* pushes forth your attack.$} {
     .trackItem rolm {angel attack};
 } {2};
@@ -130,14 +163,23 @@
     .trackItem rolm {phoenix heal};
 } {2};
 
+#action {^The %* siphons energy from your enemy, passing it along to you.$} {
+    .trackItem rolm {skull siphon};
+} {2};
+
 #action {^The aegis rune on the PsiMace pulses for a moment.$} {
     blockSelfTrack item rolm;
     .trackItem rolm {aegis block};
 } {2};
 
+
 #NOP -- Banu Cloak;
 #action {Your cloak causes your form to phase, reducing the impact from the attack.} {
     .trackItem {banu cloak} DR;
+} {2};
+
+#action {^Your cloak causes your form to blink out, avoiding the incoming attack.$} {
+    .trackItem {banu cloak} Dodge;
 } {2};
 
 #NOP -- Regalia of the Faerie Queen;

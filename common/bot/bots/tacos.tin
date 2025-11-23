@@ -1,13 +1,72 @@
 #class {bot} {open}
 
-#send {repeat nocombat/grab shell};
-#act {You try to grab a taco shell, but they all wriggle away from your grasp!} {e;repeat nocombat/grab lettuce};
-#act {You try to grab some lettuce, but it shrinks away from your hand!} {e;repeat nocombat/grab tomatoes};
-#act {You try to grab some tomatoes but they quiver like jello and slime away} {e;repeat nocombat/grab cheese};
-#act {You try to grab a handful of cheese, but it slips away from you.} {s;repeat nocombat/grab meat};
-#act {You try to grab some meat, but it creeps away from your grasp!} {w;repeat nocombat/grab cream};
-#act {You try to grab a scoop of the sour cream, but it quivers away from you.} {w;repeat nocombat/grab guac};
-#act {You try to grab a scoop of the guacamole, but it quivers away from you.} {w;repeat nocombat/grab sauce};
-#act {You try to grab a packet of hot sauce, but it crinkles away from you.} {#nop;#class bot kill;};
+#action {^-R-_>x< DEATH TACO - CRISPY SHELLS >x< (e)} {
+    #map goto 6509;
+    #var taco_ingredient shell;
+} {1};
+
+#ticker taco_check {
+    #if {!$idle && !$incombat} {grab $taco_ingredient};
+} {2};
+
+#act {You try to grab a taco shell, but they all wriggle away from your grasp!} {e} {1};
+#act {You try to grab some lettuce, but it shrinks away from your hand!} {e} {1};
+#act {You try to grab some tomatoes but they quiver like jello and slime away} {e} {1};
+#act {You try to grab a handful of cheese, but it slips away from you.} {s} {1};
+#act {You try to grab some meat, but it creeps away from your grasp!} {w} {1};
+#act {You try to grab a scoop of the sour cream, but it quivers away from you.} {w} {1};
+#act {You try to grab a scoop of the guacamole, but it quivers away from you.} {w} {1};
+#act {You try to grab a packet of hot sauce, but it crinkles away from you.} {#class bot kill} {1};
+
+
+#action {^You plummet, and SLAM into the ground!$} {
+    #map get roomvnum temp_go_back;
+    #class taco_ports open;
+    #line oneshot #action {>x< DEATH TACO FLOOR >x< (e,w)} {
+        #map goto 6519;
+        #ticker taco_go_back {
+            #if !$incombat {e}
+        } {4};
+    } {1};
+    #line oneshot #action {>x< DEATH TACO FLOOR >x< (w)} {
+        #map goto 6518;
+        #ticker taco_go_back {
+            #if !$incombat {climb up;#delay 2 {go $temp_go_back}};
+        } {4};
+    } {1};
+    #class taco_ports close;
+};
+
+
+/*
+Veggie Taco:A Cervesa = first time use, +con, overmax sp after
+A side of rice. = overmax hp/sp
+A Veggie Taco = first time use, +wis, overmax after
+A gigantic pop
+
+Cheesy Taco
+Foil wrapper = radiation and mental ac
+nacho cheese = cold and acid ac
+meat paste = edged and energy ac
+sour cream = flame and electricity ac
+refried beans = crushing and poison ac
+
+Meat Taco
+cup of salsa
+wet wipe - stops combat
+Sliced jalapenos - +hp regen
+Cinnamon twists - throw for damage
+
+Works Taco
+Lettuce leaf
+hot sauce
+Cup of salsa - +dex, +int, +wis, +cha, regen
+
+Death Taco
+spork tier3+
+codpiece
+Guacamole skin treatment
+Shot of tequila - damage to mobs
+*/
 
 #class {bot} {close}

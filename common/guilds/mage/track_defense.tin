@@ -66,25 +66,52 @@ clear_defense_tracker;
     #format $cast_percent {%f} {$cast_percent};
     #format $block_per_cast {%f} {$block_per_cast};
 
+    #list spell_costs indexate name;
+    #list spell_costs find {%i$defense_name} tmpIndex;
+    #math tmpSpCost {$cast_count * $spell_costs[$tmpIndex][cost]};
+    #math totalSpCost {$totalSpCost + $tmpSpCost};
+
+    #math {sp_per_block} {$tmpSpCost / $block_count};
+    
+    #format tmpSpCost {%g} {$tmpSpCost};
+    #format block_count {%g} {$block_count};
+    #format cast_count {%g} {$cast_count};
+
     #if {"$defense_name" == "Total"} {
-        #format result {<acf>-----<faa> %+30s %+6s %+6s %+6s %+6s %+6s   <acf>-----} {$defense_name} {$cast_count} {$cast_percent} {$block_count} {$block_percent} {$block_per_cast};
+        #format totalSpCost {%g} {$totalSpCost};
+        #math {total_sp_per_block} {$totalSpCost / $block_count};
+        #format result {<acf>-----<faa> %+30s %+6s %+6s %+6s %+6s %+6s %+8s %+6s   <acf>-----} {$defense_name} {$cast_count} {$cast_percent} {$block_count} {$block_percent} {$block_per_cast} {$totalSpCost} {$total_sp_per_block};
     } {
-        #format result {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s   <acf>-----} {$defense_name} {$cast_count} {$cast_percent} {$block_count} {$block_percent} {$block_per_cast};
+        #format result {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s %+8s %+6s   <acf>-----} {$defense_name} {$cast_count} {$cast_percent} {$block_count} {$block_percent} {$block_per_cast} {$tmpSpCost}  {$sp_per_block};
     };
     #showme $result;
 };
 
 #alias {defense_summary} {
-    #format header1 {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s   <acf>-----} {Defense Type} {# of} {% of} {# of} {% of} {Blocks/};
-    #format header2 {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s   <acf>-----} {} {Casts} {Casts} {Blocks} {Blocks} {Cast};
-    #format header3 {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s   <acf>-----} {} {} {} {} {} {};
+    #format header1 {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s %+7s %+6s   <acf>-----} {Defense Type} {# of} {% of} {# of} {% of} {Blocks/} {SP} {SP/};
+    #format header2 {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s %+8s %+6s   <acf>-----} {} {Casts} {Casts} {Blocks} {Blocks} {Cast} {Spent} {Block};
+    #format header3 {<acf>-----<fff> %+30s %+6s %+6s %+6s %+6s %+6s %+8s %+6s   <acf>-----} {} {} {} {} {} {} {} {};
     #showme $header1;
     #showme $header2;
     #showme $header3;
 
+    #var totalSpCost 0;
+
     #foreach $defense_tracker[%*] index {
         formatDefense {$index[name]} {$index[casts]} {$index[blocks]}
     };
+};
+
+#alias {.calc_defense_summary} {
+    #var cast_count 0;
+    #var totalSpCost 0;
+    #list spell_costs indexate name;
+    #foreach $defense_tracker[%*] index {
+        #list spell_costs find {%i$index[name]} tmpIndex;
+        #math tmpSpCost {$index[casts] * $spell_costs[$tmpIndex][cost]};
+        #math totalSpCost {$totalSpCost + $tmpSpCost};
+    };
+    #format totalSpCost {%g} {$totalSpCost};
 };
 
 #alias {defense_update_cast} {
@@ -153,12 +180,18 @@ clear_defense_tracker;
     defense_update_block magnificent-shield;
 };
 
-#action {You cast protection from evil on yourself.} {
+#action {^You cast protection from evil on yourself.} {
     defense_update_cast prot-evil;
-};
-#action {Your Protection from Evil has blocked the assault} {
+} {2};
+#action {^Your Protection from Evil has blocked the assault} {
     defense_update_block prot-evil;
-};
+} {2};
 
+#action {You cast protection from good on yourself.} {
+    defense_update_cast prot-good;
+} {2};
+#action {Your Protection from Good has blocked the assault} {
+    defense_update_block prot-good;
+};
 
 #class guild_mage_defense_tracker close

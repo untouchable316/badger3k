@@ -18,6 +18,13 @@
 
 };
 
+#NOP -- Cove of the 3;
+#alias {cove_gems} {
+    present raqna's gem;
+    present tyra's gem;
+    present brenan's gem;
+};
+
 #NOP -- FIREBAT;
 #alias firebat_west {e;e;n;n;w;w;n;w;w;n;n;n;};
 #alias firebat_return {e;s;e;e;s;s;s;e;e;s;s;w;w;};
@@ -36,7 +43,6 @@
 };
 
 #NOP -- WITCHY HAT;
-
 #alias charge_hat {
     pull lever;
     get capacitor;
@@ -77,6 +83,13 @@
     light;
     #class exit_prys close;
 };
+
+
+#NOP -- Xenolocles;
+#sub {^Xenolocles blasts into %1 with a beam of white light!$} {<ffe> FIRST LIFE  Xenolocles blasts into %1 with a beam of white light!<088>};
+#sub {^Xenolocles blasts into %1 with a beam of emerald light!$} {<ceb> SECOND LIFE  Xenolocles blasts into %1 with a beam of emerald light!<088>};
+#sub {^Xenolocles blasts into %1 with a beam of azure light!$} {<bbe> THIRD LIFE  Xenolocles blasts into %1 with a beam of azure light!<088>};
+#sub {^Xenolocles blasts into %1 with a beam of red light!$} {<fbb> FOURTH LIFE  Xenolocles blasts into %1 with a beam of red light!<088>};
 
 
 #class {misc_common} {close};
