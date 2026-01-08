@@ -24,7 +24,11 @@
     #if {"${toggles[emote_eheal]}" == ""} {#var toggles[emote_eheal] 1};
     #if {"${toggles[emote_rally]}" == ""} {#var toggles[emote_rally] 1};
     #if {"${toggles[emote_corpse]}" == ""} {#var toggles[emote_corpse] 1};  
-    #if {"${toggles[emote_dungeon_clear]}" == ""} {#var toggles[emote_dungeon_clear] 1};  
+    #if {"${toggles[emote_dungeon_clear]}" == ""} {#var toggles[emote_dungeon_clear] 1};
+
+    #if {"$guild" == "necromancer"} {
+        #if {"${toggles[emote_aid]}" == ""} {#var toggles[emote_aid] 1};  
+    };
 };
 
 #alias {toggle} {
@@ -494,6 +498,7 @@
         clearChatHeader;
         draw_chat;
         draw_all;
+        #delay 2 {init_screen};
         
         #NOP -- Now save the state after everything is loaded;
         _variable_export;
