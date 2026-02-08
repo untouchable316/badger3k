@@ -3,175 +3,21 @@
 
 #NOP -- deadman;
 #alias {_player_deadmanActions} {
-    #if {$bot[active]} {
-        .pause;
-        #echo {stepper paused due to deadman timer}
-    };
+    #echo {stepper paused due to deadman timer}
 };
 
-#NOP tacos;
-#alias starttacos {
-    #echo {Starting Taco Run!};
-    #if {"$guild" == "mage"} {cast levitate};
-    #if {"$guild" == "juggernaut"} {jumpjet};
-    scaler 91;
-    e;
-    repeat nocombat/grab shell/0;
-    scaler 150;
-
-    #line oneshot #action {You try to grab a taco shell, but they all wriggle away from your grasp!} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {#delay 2 {jumpjet}};
-
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            e;
-            repeat nocombat/grab lettuce/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            e;
-            repeat nocombat/grab lettuce/0
-        }
-    };
-    #line oneshot #action {You try to grab some lettuce, but it shrinks away from your hand!} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            e;
-            repeat nocombat/grab tomatoes/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            e;
-            repeat nocombat/grab tomatoes/0
-        }
-    };
-    #line oneshot #action {^You try to grab some tomatoes but they quiver like jello and slime away\nfrom you!$} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            e;
-            repeat nocombat/grab cheese/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            e;
-            repeat nocombat/grab cheese/0
-        }
-    };
-    #line oneshot #action {You try to grab a handful of cheese, but it slips away from you.} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            s;
-            repeat nocombat/grab meat/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            s;
-            repeat nocombat/grab meat/0
-        }
-    };
-    #line oneshot #action {You try to grab some meat, but it creeps away from your grasp!} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            w;
-            repeat nocombat/grab sour cream/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            w;
-            repeat nocombat/grab sour cream/0
-        }
-    };
-    #line oneshot #action {You try to grab a scoop of the sour cream, but it quivers away from you.} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            w;
-            repeat nocombat/grab guacamole/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            w;
-            repeat nocombat/grab guacamole/0
-        }
-    };
-    #line oneshot #action {You try to grab a scoop of the guacamole, but it quivers away from you.} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            #delay 2 {jumpjet};
-            w;
-            repeat nocombat/grab hot sauce/0
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            cast levitate;
-            w;
-            repeat nocombat/grab hot sauce/0
-        }
-    };
-    #line oneshot #action {You try to grab a packet of hot sauce, but it crinkles away from you.} {
-        repeat off;
-        #if {"$guild" == "mage"} {deplete levitate};
-        #if {"$guild" == "juggernaut"} {jumpjet};
-        
-        #line oneshot #action {Your jumpjets shut down and you land on the ground.} {
-            get all;
-            w;
-            #delay 2 {
-                #echo {Taco Run Complete!}
-            }
-        };
-
-        #line oneshot #action {You float gently to the ground.} {
-            get all;
-            w;
-            #delay 2 {
-                #echo {Taco Run Complete!}
-            }
-        }
+#NOP -- auction balangool;
+#alias au-sz {
+    give green capsule to robert;
+    give green capsule to robert;
+    give orange capsule to robert;
+    give orange capsule to robert;
+    give blue capsule to robert;
+    give blue capsule to robert;
+    give figurine to robert;
+    auction 69;
+    #delay 5 {
+        atalk scaler 150
     }
 };
 
@@ -282,20 +128,14 @@
     unstash2 all emerald dust;
     unstash2 all diamond;
     unstash2 all diamond dust;
-    unstash2 all sapphire;
-    unstash2 all sapphire dust;
-    unstash2 all ruby;
-    unstash2 all ruby dust;
-    unstash2 all pearl;
-    unstash2 all opal dust;
-    unstash2 all cancer's tears;
+    unstash2 all heart of soul;
+    unstash2 all heart of shadow;
 };
 
-#NOP -- unstash all frags/essence/hearts;
+#NOP -- unstash all frags/essence;
 #alias {ustash2} {
     unstash2 all fragment;
     unstash2 all essence;
-    unstash2 all heart;
 };
 
 #NOP -- unstash ore and prospect ore;
@@ -319,35 +159,9 @@
     #echo {<efb>Jewels: <cdd>diamond, diamond dust <088>};
     #echo {<efb>Heart: <cdd>heart of shadow <088>};
     #echo {<fba>-------------------------------------- <088>};
-    #echo {<caf>Other good gem options: <088>};
-    #echo {<bea>major agent <fff>- +5 str/wis <088>};
-    #echo {<efb>Jewels: <cdd>sapphire, sapphire dust <088>};
-    #echo {<efb>Heart: <cdd>heart of compassion <088>};
-    #echo {<fba>-------------------------------------- <088>};
-    #echo {<bea>major abbot <fff>- +5 wis/cha <088>};
-    #echo {<efb>Jewels: <cdd>ruby, ruby dust <088>};
-    #echo {<efb>Heart: <cdd>heart of destruction <088>};
-    #echo {<fba>-------------------------------------- <088>};
-    #echo {<bea>major scholar <fff>- +5 int/wis <088>};
-    #echo {<efb>Jewels: <cdd>diamond, diamond dust <088>};
-    #echo {<efb>Heart: <cdd>heart of soul <088>};
-    #echo {<fba>-------------------------------------- <088>};
-    #echo {<bea>major jackal <fff>- +5 int/con <088>};
-    #echo {<efb>Jewels: <cdd>sapphire, sapphire dust <088>};
-    #echo {<efb>Heart: <cdd>heart of ascension <088>};
-    #echo {<fba>-------------------------------------- <088>};
-    #echo {<bea>major despot <fff>- +4 int/wis/cha <088>};
-    #echo {<efb>Jewels: <cdd>ruby, ruby dust <088>};
-    #echo {<efb>Heart: <cdd>heart of knowledge <088>};
-    #echo {<fba>-------------------------------------- <088>};
-    #echo {<bea>standard exessive health and spirit <fff>- overmax hp/sp regen <088>};
-    #echo {<efb>Jewels: <cdd>pearl, opal dust <088>};
-    #echo {<efb>Essence: <cdd>essence of knowledge <088>};
-    #echo {<fba>-------------------------------------- <088>};
-    #echo {<bea>major exessive health and spirit <fff>- overmax hp/sp regen <088>};
-    #echo {<efb>Jewels: <cdd>cancers tears, ruby dust <088>};
-    #echo {<efb>Heart: <cdd>heart of knowledge <088>};
-    #echo {<fba>====================================== <088>};
+    #echo {<bea> List of jewels/hearts I collect <088>};
+    #echo {<efb>Jewels: <cdd>emerald, emerald dust, diamond, diamond dust <088>};
+    #echo {<efb>Hearts: <cdd>heart of soul, heart of shadow <088>};
 };
 
 #NOP -- view all 3kdb reports/trackers;
@@ -387,7 +201,6 @@
     get all;
     keep all bag;
 };
-
 
 #NOP -- turn toggles on or off;
 #alias {togg} {
@@ -697,7 +510,7 @@
             shoo golem;
             mystrategy;
             strategy shoosummons;
-            ms 10##4#1500#70#assist#summons#always;
+            ms 11##4#1500#70#assist#summons#always;
             ms golema;
         };
         #NOP -- 4 summons defending;
@@ -706,7 +519,7 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 10##4#1500#70#defend#summons#always;
+            ms 11##4#1500#70#defend#summons#always;
             ms golema;
         };
         #NOP -- 3 summons assisting and 1 summon defending;
@@ -715,8 +528,8 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 10##3#1500#70#assist#summons#always;
-            ms 10##1#1500#70#defend#summons#always;
+            ms 11##3#1500#70#assist#summons#always;
+            ms 11##1#1500#70#defend#summons#always;
             ms golema;
         };
         #NOP -- 1 summon defending and 3 summons assisting and golem defending;
@@ -726,8 +539,8 @@
             shoo golem;
             mystrategy-golem;
             strategy shoosummons;
-            ms 10##1#1500#70#defend#summons#always;
-            ms 10##3#1500#70#assist#summons#always;
+            ms 11##1#1500#70#defend#summons#always;
+            ms 11##3#1500#70#assist#summons#always;
             ms golemd;
         };
         #NOP -- offensive mage - golem assisting;
@@ -746,7 +559,7 @@
             shoo golem;
             mystrategy;
             strategy shooshummons;
-            ms 10##4#1500#70#assist#summons#always;
+            ms 11##4#1500#70#assist#summons#always;
             ms golema;
         };
         #NOP -- default for summoner 2 summons defending and 2 summons assisting;
@@ -756,8 +569,8 @@
             shoo;
             shoo golem;
             mystrategy;
-            ms 10##2#1500#70#defend#summons#always;
-            ms 10##2#1500#70#assist#summons#always;
+            ms 11##2#1500#70#defend#summons#always;
+            ms 11##2#1500#70#assist#summons#always;
             ms golema;
         };
         #default {
@@ -1023,7 +836,7 @@
         gag+ hpbar
     };
     #elseif {"$guild" == "bard"} {
-        gag+ hpbar
+        #nop gag+ hpbar
     };
     #elseif {"$guild" == "fremen"} {
         gag+ hpbar
@@ -1381,9 +1194,7 @@
     };
     #elseif {"$guild" == "elemental"} {
         strategy-clear;
-        strategy epowers;
-        strategy blasts;
-        strategy thefourwinds
+        strategy blasts
     };
     #elseif {"$guild" == "bard"} {
         strategy-clear;
@@ -2308,9 +2119,10 @@
 #list badger3kdb add {{{name} {mine2} {type} {misc} {desc} {mine: adamantium obsidian nethernium voidstone phasemetal chaostone}}};
 #list badger3kdb add {{{name} {craftstuff} {type} {misc} {desc} {gems/jewels/hearts/essence's that i collect/use}}};
 #list badger3kdb add {{{name} {ustash1} {type} {misc} {desc} {unstash all the jewels i collect/use}}};
-#list badger3kdb add {{{name} {ustash2} {type} {misc} {desc} {unstash all frags/essence/hearts}}};
+#list badger3kdb add {{{name} {ustash2} {type} {misc} {desc} {unstash all frags/essence}}};
 #list badger3kdb add {{{name} {ore1} {type} {misc} {desc} {unstash ore and prospect ore}}};
 #list badger3kdb add {{{name} {starttacos} {type} {misc} {desc} {start taco bot}}};
+#list badger3kdb add {{{name} {au-sz} {type} {misc} {desc} {auction balangool figurine with caps}}};
 
 #NOP -- guild -- juggernaut;
 #if {"$guild" == "juggernaut"} {
