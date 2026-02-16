@@ -66,6 +66,6 @@
 
 #NOP --- GENERAL MISC;
 #action {The regenerative mist surrounding %w dissipates.} {regenerate $lower} {1};
-
-
+#action {attack} {beckon;#delay {3} {beckon}} {1};
+ 
 #class {player_actions} {close}

@@ -3,8 +3,8 @@
 
 #NOP -- Bot Config;
 #NOP -- These actions are all ways to customize the bot or add "extra" steps the client should take before:
-#NOP 1) Running the bot --> .pre_bot_check;
-#NOP 2) Engaging a mob -->  .pre_fight_check;
+#NOP 1 Running the bot --> .pre_bot_check;
+#NOP 2 Engaging a mob -->  .pre_fight_check;
 
 #NOP -- This alias is run when the bot begins.  Use it to set specific reflexes, strategies, defense variables, etc.;
 #NOP -- Bot Config;
@@ -14,7 +14,7 @@
 #alias {.pre_bot_check} {
      #NOP -- Kill-Em-All, Reflex, Spell, Song Settings based on area name here;
      #NOP -- Songs aren't added in the initial alias so you're not singing and blocking all your spells from casting;
-     #NOP -- Add songs via the aliases before you kick off the stepper;
+     #NOP -- Add songs via the aliases before you kick off the stepper};
 
      #NOP -- Empowered Strikes and Blink are always on;
      #var defs[es] 1;

@@ -6,7 +6,7 @@
 #alias {prot2} {prots_spells;prots_songs;deadman 200;deadman 200};
 
 #alias {sna} #ticker {snar} {snare mage;snare thief} {3};
-#alias {heal} #ticker {heals} {dream zzzzzzzzzzzzzzzzzzzzzzzzz} {2};
+#NOP -- #alias {heal} #ticker {heals} {dream zzzzzzzzzzzzzzzzzzzzzzzzz} {2};
 #alias {theart} #ticker {hearts} {carve heart} {2};
 #alias {bas} #ticker {tbash} {bash} {2};
 #alias {tstop} {#unticker tbash;#unticker snar;#unticker heals;#unticker hearts};
