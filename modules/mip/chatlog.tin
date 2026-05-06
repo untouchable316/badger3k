@@ -1,3 +1,4 @@
+#class {mipchatlog} {kill}
 #class {mipchatlog} {open}
 
 #NOP -- Discord Message Sending;
@@ -387,6 +388,93 @@
 		#if {"$chatCategory" != "general"} {postChatCategory};
 	} {update_chat <178>$mip[comm][source]<088>: $mip[comm][data]};
 	#delay 10 {#unvar chat[act_tell][from]}
+} {2};
+
+
+#NOP -- Capture says;
+#var captureSays 1;
+
+#NOP -- Turn off capturing for sayhist;
+#alias sayhist {
+	#send {!sayhist};
+	#var captureSays 0;
+	#delay 2 {#var captureSays 1};
+};
+
+
+#alias _testSayPattern {
+	#var logSay 1;
+	#regex $tmpText {%*, %* always} {#var logSay 0};
+	#regex $tmpText {all, you are now in group %*} {#var logSay 0};
+	#regex $tmpText {%*, ibc} {#var logSay 0};
+	#regex $tmpText {Brigga Bragga! Hizzie wizzie snizzie lizzie! CHOWDA CHOWDA CHOWDA!!!!} {#var logSay 0};
+	#regex $tmpText {Wizza Wazza! Da bibble for rizzle Wikkie Wakky Yakko Wakko and Dot!} {#var logSay 0};
+	#regex $tmpText {Very well... Let me get you over to a trainer} {#var logSay 0};
+};
+
+#action {~\e[0m\e[36;1mYou say:\e[0m %*\e[0m} {
+	#unvar tmpTextHolder;
+	#unvar tmpText;
+	#unvar tmpText1;
+	#unvar tmpText2;
+	#if $captureSays {
+		#if $toggles[chatlog_says] {
+			#format tmpText1 {%p} {%1};
+			#action {         %*} {
+				#format tmpTextHolder {%p} {%%1};
+				#cat tmpText2 { $tmpTextHolder};
+			} {1};
+			#replace tmpText1 {\n} { };
+			#delay .1 {
+				#if {"${tmpText2}" !== ""} {
+					#var tmpText {$tmpText1 $tmpText2};
+				} {
+					#var tmpText $tmpText1;
+				};
+				#format tmpText {%p} {$tmpText};
+				#replace tmpText {  } { };
+				_testSayPattern;
+				#var tmpText @sanitizePayload{$tmpText};		
+				#if $logSay {update_chat <178>$user_cap says<088>: $tmpText};
+				#unaction {         %*};
+			};
+		};
+	};
+} {2};
+         
+#action {~\e[0m\e[36;1m%w says:\e[0m %*\e[0m} {
+	#unvar tmpTextHolder;
+	#unvar tmpText;
+	#unvar tmpText1;
+	#unvar tmpText2;
+	#if $captureSays {
+		#if $toggles[chatlog_says] {
+			#var tmpItem 0;
+			#var tmpPlayer %1;
+			#list players find {%i$tmpPlayer} tmpItem;
+			#if {$tmpItem} {
+				#format tmpText1 {%p} {%2};
+				#action {         %*} {
+					#format tmpTextHolder {%p} {%%1};
+					#cat tmpText2 { $tmpTextHolder};
+				} {1};
+				#replace tmpText1 {\n} { };
+				#delay .1 {
+					#if {"${tmpText2}" !== ""} {
+						#var tmpText {$tmpText1 $tmpText2};
+					} {
+						#var tmpText $tmpText1;
+					};
+					#format tmpText {%p} {$tmpText};
+					#replace tmpText {  } { };
+					_testSayPattern;
+					#var tmpText @sanitizePayload{$tmpText};		
+					#if $logSay {update_chat <178>$tmpPlayer says<088>: $tmpText};
+					#unaction {         %*};
+				};
+			};
+		};
+	};
 } {2};
 
 

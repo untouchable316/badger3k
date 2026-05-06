@@ -19,6 +19,7 @@
 #list dReportList add {{{key} {gxp_per_rnd} {lookup} {tmpGxpPerRnd} {header_text}   {GXP Per Rnd} {totals} {tmpAvgGxpPerRnd} {width} {11} {active} {0}}};
 #list dReportList add {{{key} {mob_attacks_melee} {lookup} {tmpMobAttacksMelee} {header_text}   {Melee} {totals} {tmpTotalMobAttacksMelee} {width} {11} {active} {0}}};
 #list dReportList add {{{key} {mob_attacks_special} {lookup} {tmpMobAttacksSpecial} {header_text}   {Specials} {totals} {tmpTotalMobAttacksSpecial} {width} {11} {active} {0}}};
+#list dReportList add {{{key} {eternal_gxp} {lookup} {tmpEternalGxp} {header_text} {Eternal GXP} {totals} {tmpTotalEternalGxp} {width} {15} {active} {0}}}
 
 
 #NOP -- Necromancer Specific;
@@ -270,6 +271,7 @@
     #list deathSummary_mob_attacks_melee clear;
     #list deathSummary_mob_attacks_specials clear;
     #list deathSummary_sp_spent clear;
+    #list deathSummary_eternal_gxp clear;
     #echo {<eef>   -=+=-  -=+=-  -=+=-  -=+=-<088>      <eaa>3k KILL REPORT CLEARED          <eef>-=+=-  -=+=-  -=+=-  -=+=-<088>};
 };
 
@@ -316,6 +318,7 @@
         #var tmpAvgGxp 0;
         #var tmpAvgGxpPerRnd 0;
         #var tmpSpSpent 0;
+        #var tmpTotalEternalGxp 0;
 
         #var tmpPerMobXp 0;
         #var tmpPerMobRnds 0;
@@ -327,6 +330,7 @@
         #var tmpGxp 0;
         #var tmpGxpPerRnd 0;
         #var tmpTotalSpSpent 0;
+        #var tmpPerMobEternalGxp 0;
 
         #var tmpMobAttacksMelee 0;
         #var tmpMobAttacksSpecial 0;
@@ -360,7 +364,8 @@
                 #math tmpTotalMobAttacksSpecial {$deathSummary_mob_attacks_specials[$item] + $tmpTotalMobAttacksSpecial};
                 #math tmpTotalMobAttacksTotal {$deathSummary_mob_attacks_total[$item] + $tmpTotalMobAttacksTotal};
                 #math tmpTotalSpSpent {$deathSummary_sp_spent[$item] + $tmpTotalSpSpent};
-                
+                #math tmpTotalEternalGxp {$deathSummary_eternal_gxp[$item] + $tmpTotalEternalGxp};
+
                 #math tmpTotalRatio {$tmpTotalXp / $tmpTotalClass * 100.00};
                 #format tmpTotalRatio {%d} $tmpTotalRatio;
 
@@ -383,6 +388,7 @@
                 #format tmpMobAttacksSpecial {%g} {$deathSummary_mob_attacks_specials[$item]};
                 #format tmpMobAttacksTotal {%g} {$deathSummary_mob_attacks_total[$item]};
                 #format tmpMobSpSpent {%g} {$deathSummary_sp_spent[$item]};
+                #format tmpEternalGxp {%g} {$deathSummary_eternal_gxp[$item]};
                 
 
                 #var tmpLookup[tmpMob] $tmpMob;
@@ -400,6 +406,7 @@
                 #var tmpLookup[tmpMobAttacksMelee] $tmpMobAttacksMelee;
                 #var tmpLookup[tmpMobAttacksSpecial] $tmpMobAttacksSpecial;
                 #var tmpLookup[tmpMobSpSpent] $tmpMobSpSpent;
+                #var tmpLookup[tmpEternalGxp] $tmpEternalGxp;
                 
                 
                 #if {$tmpCoins == 0} {#var tmpCoins -};
@@ -435,6 +442,7 @@
             #math tmpAvgGxpPerRnd {$tmpTotalGxp / $tmpTotalRnds * 1.0};
             #math tmpPerMobAttacksMelee {$tmpTotalMobAttacksMelee / $tmpTotalKills};
             #math tmpPerMobAttacksSpecial {$tmpTotalMobAttacksSpecial / $tmpTotalKills};
+            #math tmpPerMobEternalGxp {$tmpTotalEternalGxp / $tmpTotalKills};
 
             #format tmpPerMobXp {%M} $tmpPerMobXp;
             #replace tmpPerMobXp {G} {B};

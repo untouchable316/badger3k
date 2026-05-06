@@ -25,12 +25,29 @@
 } {1};
 
 #NOP -- if i accidently pick up corpses durning a stepper;
+#NOP -- bag1 uses bag1_active so we do not rely on line oneshot next line only;
 #action {The corpse is too big.} {
+    #if {"$bag1_active" == "1"} {
+        #var bag1_active 0;
+        #var bagsFull 0;
+        #unaction {You put %* in %*.};
+        #if {"$guild" == "necromancer"} {
+            drop remains;
+            preserve get;
+        };
+        #var bag1_gag_mode 1;
+        #delay 5 {#var bag1_gag_mode 0};
+        #line gag;
+    } {
+        #if {"$bag1_gag_mode" == "1"} {
+            #line gag;
+        };
+    };
     #if {!$idle_flag && $bot[active] && "$guild" == "fremen"} {
         drop corpse;
         fai
-    }
-};
+    };
+} {1};
 
 #NOP -- if not wielding a weapon as fremen;
 #action {^You are not wielding a weapon.} {
@@ -83,8 +100,8 @@
 };
 
 #NOP -- QUICK FIX FOR BANSHEES STEPPER;
-#action {You fail to penetrate the magical barrier.} {dispel;down};
-#action {You cannot find your way around the MASSIVE boulder that blocks that exit.} {smash boulder;down};
+#action {You fail to penetrate the magical barrier.} {dispel;mapUndo};
+#nop #action {You cannot find your way around the MASSIVE boulder that blocks that exit.} {smash boulder;down};
 
 #NOP -- reflexes;
 #variable {tmp_explosive_release} {0};

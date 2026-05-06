@@ -5,6 +5,8 @@
 #var check_room 0;
 #var toggle_portal_room 1;
 #var toggle_portal_room_empty 1;
+#var bot[zodiac_bt] 0;
+#var bot[zodiac_aeonos_seen] 0;
 
 #NOP -- mobs are good, set rolm to demon;
 touch demon rune;
@@ -138,6 +140,12 @@ touch demon rune;
 
 #list botmobs add {{{long} {Treasure Chest of Amalgamation} {target} {amalgamation}}};
 #list botmobs add {{{long} {Mimic} {target} {mimic}}};
+#list botmobs add {{{long} {Lost Soul of the Zodiac} {target} {soul}}};
+#list botmobs add {{{long} {%*, the Colossus} {target} {colossus}}};
+
+#action {Aeonos, the Celestial Nexus} {
+    #var bot[zodiac_aeonos_seen] 1;
+} {1};
 
 #action {Your celestial insight reveals the creation of a portal to the unknown.} {
         #if {"$toggle_portal_room" == "1"} { 
@@ -241,6 +249,91 @@ touch demon rune;
 #action {Chamber of the chest \(e,sw\)} {#if {$bot[foundmob] == 1} {return};#unact {Chamber of the chest \(e,sw\)};.chest_action} {1};
 #action {Explorer's Lounge \(e,sw\)} {#if {$bot[foundmob] == 1} {return};#unact {Explorer's Lounge \(e,sw\)};.chest_action} {1};
 
+#alias {.zodiac_resume_normal} {
+    #var bot[zodiac_bt] 0;
+    .unpause;
+    ..;
+};
+
+#alias {.zodiac_physical_backstep} {
+    #if {"$bot[zodiac_bt]" != "1"} {#return};
+    #if {$bot[step] <= 1} {#return};
+    #math {_zidx} {$bot[step] - 1};
+    #if {$_zidx < 1} {#return};
+    #list {bot[steps]} {get} {$_zidx} {zodiac_tok};
+    #format {zodiac_tok} {%p} $zodiac_tok;
+    #map get roomvnum zodiac_curv;
+    #if {"$zodiac_tok" == "u" && "$zodiac_curv" != "$bot[start_vnum]"} {
+        .zodiac_resume_normal;
+        #return;
+    };
+    #switch {"$zodiac_tok"} {
+        #case {"n"} {#send s};
+        #case {"s"} {#send n};
+        #case {"e"} {#send w};
+        #case {"w"} {#send e};
+        #case {"ne"} {#send sw};
+        #case {"nw"} {#send se};
+        #case {"se"} {#send nw};
+        #case {"sw"} {#send ne};
+        #case {"u"} {#send d};
+        #case {"d"} {#send u};
+        #case {"enter"} {#send out};
+        #case {"out"} {#send enter};
+        #case {"portal"} {#send portal};
+        #case {"swim"} {#send swim};
+        #case {"light"} {#nop};
+        #default {
+            #var bot[zodiac_bt] 0;
+            .unpause;
+            #showme {Zodiac backstep unknown token $zodiac_tok};
+            ..;
+        };
+    };
+    #if {"$bot[zodiac_bt]" == "1"} {
+        #math {bot[step]} {$bot[step] - 1};
+        #var {bot[walk]} {0};
+    };
+};
+
+#alias {.zodiac_after_glance} {
+    #if {"$bot[zodiac_bt]" != "1"} {#return};
+    #map get roomvnum zodiac_curv;
+    #if {"$zodiac_curv" == "$bot[start_vnum]"} {
+        .zodiac_resume_normal;
+        #return;
+    };
+    #if {$bot[foundmob]} {
+        #if {"$mob[target]" == "colossus" || "$mob[target]" == "mimic" || ("$mob[target]" == "soul" && "$bot[zodiac_aeonos_seen]" != "1")} {
+            .pause;
+            .zodiac_physical_backstep;
+            #delay .3 {glance};
+            #delay 2 {.zodiac_after_glance};
+        } {
+            #var bot[zodiac_bt] 0;
+            .unpause;
+            .determineBotAction;
+        };
+    } {
+        #if {$bot[step] <= 1} {
+            #showme {Zodiac: celestial backtrack found no listed mob};
+            .zodiac_resume_normal;
+        } {
+            .pause;
+            .zodiac_physical_backstep;
+            #delay .3 {glance};
+            #delay 2 {.zodiac_after_glance};
+        };
+    };
+};
+
+#action {^You cannot leave while there are still celestials present on this level.$} {
+    #var bot[zodiac_bt] 1;
+    .pause;
+    mapUndo;
+    #delay .3 {glance};
+    #delay 2 {.zodiac_after_glance};
+} {1};
 
 #class {bot} {close};
 #read common/bot/generic.tin;

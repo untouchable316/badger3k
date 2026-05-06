@@ -42,11 +42,14 @@
     examine cooler;
     touch diamond rune;
     #send {(powers};
+    
     .update_gags;
     init_screen;
     draw_all;
     _mob_status_clear;
     reset_trackers;
+
+    #if {"$eternal" == "1"} {_update_eternal_gxp init};
     #NOP -- Gag the few things this checks if it's not there for spam;
     #line oneshot #gag {^That is not here or it is uninteresting. (cooler?)};
     #line oneshot #gag {^You find nothing of interest.};
@@ -54,6 +57,7 @@
     #line oneshot #gag {^There is no reason to '(powers' here.};
     #line oneshot #gag {^There is no reason to 'spellDmg-clear' here.};
     #line oneshot #gag {^There is no reason to 'summonDmg-clear' here.};
+
 
     #NOP -- Some files don't seem to read in changes always, read these in again just because;
     #read common/themes.tin;
@@ -98,6 +102,7 @@
     notify on;
     init_screen;
     #send {aset look_monster_pref -M-_};
+    #send {aset look_monster_suff};
 	#send {aset look_player -P-_};
 	#send {aset room_short_pref -R-_};
 	#send {aset room_short_suff -R-_};
@@ -111,6 +116,7 @@
 	#send {aset look_armour -a-};
 	#send {aset look_other -i-};
     #send {aset say_pref hicyan};
+    #send {aset say_suff};
 	#send {prompt >$nl$};
     #send {aset world_drop_pref -!!!-};
     #line oneshot #action {^You will no longer see the HP bar on the main screen.$} {forcehp};

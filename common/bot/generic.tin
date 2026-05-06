@@ -145,6 +145,13 @@
 
 #alias {.determineBotAction} {
     #if !$bot[paused] {
+        #if {"$bot[alias]" == "zodiacs-easy"} {
+            #if {"$bot[zodiac_bt]" != "1" && "$bot[zodiac_aeonos_seen]" != "1"} {
+                #if {"$mob[target]" == "soul" || "$mob[target]" == "colossus"} {
+                    #var bot[foundmob] 0;
+                };
+            };
+        };
         .botStopWalking;
         #if {$bot[foundplayer]} {
             #if $debug[bot] {#echo {<cfa>BOT DEBUG:  Found player - calling .botStep<088>}};
@@ -228,17 +235,26 @@
             };
         };
         
-        #var bot[foundmob] 0;
-        #var bot[aggro-mob] 0;
-        #if !$idle_flag {
-            #if {"$bot[alias]" == "knights"} {#NOP} {
-                #if $actions_stacked {
-                    do_action;
-                    #delay 2 {
-                        .bot;
+        #if {"$bot[zodiac_purge_kill]" == "1"} {
+            #var bot[zodiac_purge_kill] 0;
+            #var bot[foundmob] 0;
+            #var bot[aggro-mob] 0;
+            #if !$idle_flag {
+                #delay .5 {.zodiac_resume_backtrack};
+            };
+        } {
+            #var bot[foundmob] 0;
+            #var bot[aggro-mob] 0;
+            #if !$idle_flag {
+                #if {"$bot[alias]" == "knights"} {#NOP} {
+                    #if $actions_stacked {
+                        do_action;
+                        #delay 2 {
+                            .bot;
+                        };
+                    } {
+                        #delay .5 {.bot};
                     };
-                } {
-                    #delay .5 {.bot};
                 };
             };
         };

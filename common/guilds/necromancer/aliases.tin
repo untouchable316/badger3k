@@ -8,6 +8,40 @@
   #MATH {result} {%1};
 };
 
+#var _nukeUndead 1;
+
+#NOP -- Switch invoke damage types using comtrance;
+#alias {comt} {
+    #switch {"%0"} {
+        #case {"edged"} {comtrance invoke edged};
+        #case {"blunt"} {comtrance invoke crushing};
+        #case {"fire"} {comtrance invoke flame};
+        #case {"ice"} {comtrance invoke cold};
+        #case {"acid"} {comtrance invoke corrosion};
+        #case {"electric"} {comtrance invoke lightning};
+        #case {"mind"} {comtrance invoke psionic};
+        #case {"energy"} {comtrance invoke power};
+        #case {"poison"} {comtrance invoke virulence};
+        #case {"radiation"} {comtrance invoke light};
+        #case {""} {
+            #echo {<cbf>Damage Type      Spell Name<088>};
+            #echo {<fff>-------------------------------<088>};
+            #echo {<ccd>edged        -   Edged<088>};
+            #echo {<ccd>blunt        -   Crushing<088>};
+            #echo {<ccd>fire         -   Flame<088>}; 
+            #echo {<ccd>ice          -   Cold<088>}; 
+            #echo {<ccd>acid         -   Corrosion<088>};
+            #echo {<ccd>electric     -   Lightning<088>};
+            #echo {<ccd>mind         -   Psionic<088>};  
+            #echo {<ccd>energy       -   Power<088>};    
+            #echo {<ccd>poison       -   Virulence<088>};
+            #echo {<ccd>radiation    -   Light<088>};   
+            #echo {<fff>-------------------------------<088>};
+        };
+    };    
+    #echo {<ffa>Usage: <fff>comt <damage type> <088>};
+};
+
 #NOP ----- Teleport Helper;
 #var tmpPortsets 1;
 #alias {teleport set} {
@@ -111,6 +145,7 @@
 };
 
 #alias nukeUndeadAbs {
+    #var _nukeUndead 0;
     #var ogEnemy $enemy[name_numbers];
     #var undeadKilled 0;
     ktrig OFF;
@@ -125,10 +160,12 @@
         #${undeadKilled} qtrance preserve remains/absorb;
         #unaction {%* dealt the killing blow to Undead.};
         ktrig ON;
+        #var _nukeUndead 1;
     };
 };
 
 #alias nukeUndead_noUG_Abs {
+    #var _nukeUndead 0;
     #var ogEnemy $enemy[name_numbers];
     #var undeadKilled 0;
     ktrig OFF;
@@ -142,10 +179,14 @@
         #${undeadKilled} qtrance preserve remains/absorb;
         #unaction {%* dealt the killing blow to Undead.};
         ktrig ON;
+        #var _nukeUndead 1;
     };
 };
 
+#var _nukeUndead 1;
+
 #alias nukeUndeadPres {
+    #var _nukeUndead 0;
     #var ogEnemy $enemy[name_numbers];
     #var undeadKilled 0;
     ktrig OFF;
@@ -162,10 +203,12 @@
         keep all preservation;
         #unaction {%* dealt the killing blow to Undead.};
         ktrig ON;
+        #var _nukeUndead 1;
     };
 };
 
 #alias nukeUndead_noUG_Pres {
+    #var _nukeUndead 0;
     #var ogEnemy $enemy[name_numbers];
     #var undeadKilled 0;
     ktrig OFF;
@@ -181,6 +224,7 @@
         keep all preservation;
         #unaction {%* dealt the killing blow to Undead.};
         ktrig ON;
+        #var _nukeUndead 1;
     };
 };
 

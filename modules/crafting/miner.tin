@@ -1,5 +1,8 @@
 #class {minebot} {kill};
 #class {minebot} {open};
+
+_mining_get_training_deposits;
+
 #echo {<ffa>====================================================================<088>};
 #echo {<fff>  3kdb MinerBot  quick start<088>};
 #echo {};
@@ -13,6 +16,9 @@
 #echo {<ccd>  All jewel names by ore tier: <fff>minefor-list<088>};
 #echo {};
 #echo {<ccd>Stop bots<fff>  miner-off <ccd>then <fff>miner-on<ccd> to load again.<088>};
+#echo {};
+#echo {<ccd>Based on your current mining level of $craft_mining[data][skill_level]:};
+#echo {<ccd>  $mine_training_list};
 #echo {<ffa>====================================================================<088>};
 
 #alias {mine-list} {
@@ -39,6 +45,7 @@
 #var mine[voidstone] 0;
 #var mine[phasemetal] 0;
 #var mine[chaostone] 0;
+
 
 #alias {mine %0} {
 	#regex {%0} {copper} {#var mine[copper] 1};
@@ -76,37 +83,43 @@
 
 #var deposit 0;
 
+
 #alias {miner} {
 	#class {miner} {open};
 	#act {{(A|You have found a deposit of) \w+ ore( deposit.|!)}} {
 		#undelay minewalk;
-		#regex {%%1} {copper} {#if {$mine[copper]} {mine} {_step_room}};
-		#regex {%%1} {bronze} {#if {$mine[bronze]} {mine} {_step_room}};
-		#regex {%%1} {iron} {#if {$mine[iron]} {mine} {_step_room}};
-		#regex {%%1} {steel} {#if {$mine[steel]} {mine} {_step_room}};
-		#regex {%%1} {silver} {#if {$mine[silver]} {mine} {_step_room}};
-		#regex {%%1} {gold} {#if {$mine[gold]} {mine} {_step_room}};
-		#regex {%%1} {mithril} {#if {$mine[mithril]} {mine} {_step_room}};
-		#regex {%%1} {titanium} {#if {$mine[titanium]} {mine} {_step_room}};
-		#regex {%%1} {ebon} {#if {$mine[ebon]} {mine} {_step_room}};
-		#regex {%%1} {adamantium} {#if {$mine[adamantium]} {mine} {_step_room}};
-		#regex {%%1} {obsidian} {#if {$mine[obsidian]} {mine} {_step_room}};
-		#regex {%%1} {nethernium} {#if {$mine[nethernium]} {mine} {_step_room}};
-		#regex {%%1} {voidstone} {#if {$mine[voidstone]} {mine} {_step_room}};
-		#regex {%%1} {phasemetal} {#if {$mine[phasemetal]} {mine} {_step_room}};
-		#regex {%%1} {chaostone} {#if {$mine[chaostone]} {mine} {_step_room}};
+        #var tmpMine %%1;
+        _check_mine;
 	} {1};
+
+    #alias _check_mine {
+        #regex {$tmpMine} {copper} {#if {$mine[copper]} {mine} {_step_room}};
+        #regex {$tmpMine} {bronze} {#if {$mine[bronze]} {mine} {_step_room}};
+        #regex {$tmpMine} {iron} {#if {$mine[iron]} {mine} {_step_room}};
+        #regex {$tmpMine} {steel} {#if {$mine[steel]} {mine} {_step_room}};
+        #regex {$tmpMine} {silver} {#if {$mine[silver]} {mine} {_step_room}};
+        #regex {$tmpMine} {gold} {#if {$mine[gold]} {mine} {_step_room}};
+        #regex {$tmpMine} {mithril} {#if {$mine[mithril]} {mine} {_step_room}};
+        #regex {$tmpMine} {titanium} {#if {$mine[titanium]} {mine} {_step_room}};
+        #regex {$tmpMine} {ebon} {#if {$mine[ebon]} {mine} {_step_room}};
+        #regex {$tmpMine} {adamantium} {#if {$mine[adamantium]} {mine} {_step_room}};
+        #regex {$tmpMine} {obsidian} {#if {$mine[obsidian]} {mine} {_step_room}};
+        #regex {$tmpMine} {nethernium} {#if {$mine[nethernium]} {mine} {_step_room}};
+        #regex {$tmpMine} {voidstone} {#if {$mine[voidstone]} {mine} {_step_room}};
+        #regex {$tmpMine} {phasemetal} {#if {$mine[phasemetal]} {mine} {_step_room}};
+        #regex {$tmpMine} {chaostone} {#if {$mine[chaostone]} {mine} {_step_room}};
+    };
 	
-	#action {^You begin to mine} {#undelay minewalk} {1};
+	#action {^You begin to mine} {_working_mine;#undelay minewalk} {1};
 	#NOP #action {^You have exhausted the supply of } {get all;_step_room} {1};
 	#NOP the action capture below is much more reliable;
 	#action {^You have exhausted} {get all;_step_room} {1};
 	#action {^It appears this part of the shaft has already been searched.} {_step_room} {1};
 	#action {^You have found nothing.} {_step_room} {1};
 	#action {^You are not skilled enough to mine this.} {_step_room} {1};
-	#action {^You should try to mine this instead.} {mine} {1};
+	#action {^You should try to mine this instead.} {_check_mine} {1};
 	#action {^You cannot spelunk while you're being attacked!} {#line oneshot #action {dealt the killing blow} {corpse_trig;spelunk} {1};};
-	#action {^You cannot mine while you're being attacked!} {#line oneshot #action {dealt the killing blow} {corpse_trig;mine} {1};};
+	#action {^You cannot mine while you are being attacked!} {#line oneshot #action {dealt the killing blow} {corpse_trig;_check_mine} {1};};
 	#action {^You have disturbed %*} {
 		#undelay minewalk;
 		#line oneshot #action {dealt the killing blow} {
@@ -115,11 +128,23 @@
 		} {1};
 	} {1};
 
-	#alias {_check_mine} {spelunk};
-	#alias {_step_room} {#delay minewalk {#path walk;_check_mine} {1}};
+	#alias {_step_room} {#undelay mineWorker;#delay minewalk {#path walk;spelunk} {1}};
+
+    #action {^You begin to mine the %* ore.$} {_working_mine} {1};
+    #action {^You begin working the ore vein.$} {_working_mine} {1};
+    #action {^Carefully, you pick away at the ore.$} {_working_mine} {1};
+    #action {^You are making progress, at the expense of sweat and effort.$} {_working_mine} {1};
+
+    #alias _working_mine {
+        #delay mineWorker {#if !$incombat {_step_room}} 10;
+    };
+
 	
 	#class {miner} {close};
 };
+
+
+
 
 #alias {killbot} {#undelay minewalk;#class {miner} {kill}};
 #class {minebot} {close};

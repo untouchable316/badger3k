@@ -63,6 +63,7 @@
             };
             update_xp;
             update_coins;
+            #if {"$eternal" == "1"} {_update_eternal_gxp};
             #NOP -- Clean up other tracking from modules/dmgtracker.tin and common/status.tin;
             #if $dmgtracker {.dmg_round_reset;#var cmbt[affects][convoke] 0};
 
@@ -123,6 +124,7 @@
     #var deathReport[mob_attacks_melee] $defense[current_mob_attempts][melee];
     #var deathReport[mob_attacks_special] $defense[current_mob_attempts][special];
     #var deathReport[mob_attacks_total] $defense[current_mob_attempts][total];
+    #var deathReport[mob_eradication] $mob[eternal_erad];
     #if {"$area" != ""} {#var deathReport[area] $area};
     #if {"$gxp[last-fight]" != ""} {#var deathReport[gxp_earned] $gxp[last-fight]};
     #if {"$gxp[last-fight-per-round]" != ""} {#var deathReport[gxp_earned_per_round] $gxp[last-fight-per-round]};
@@ -140,11 +142,13 @@
         #var deathReport[dsave_count] 0;
         #var deathReport[dsave_nps] 0;
     };
+
     
     #NOP -- Small delay to make sure we get the variables from the updates;
     #delay 1 {
         #var deathReport[xp_earned] $fight_xp;
         #var deathReport[coins_earned] $fight_coins;
+        #var deathReport[eternal_gxp] $my[eternal][gxp][last_fight];
         #math deathReport[xp_to_class] {$fight_xp / $deathReport[class] * 1.00};
 
         #list deathSummary_mob add {$deathReport[mob_killed]};
@@ -163,6 +167,8 @@
         #list deathSummary_mob_attacks_melee add {$deathReport[mob_attacks_melee]};
         #list deathSummary_mob_attacks_specials add {$deathReport[mob_attacks_special]};
         #list deathSummary_mob_attacks_total add {$deathReport[mob_attacks_total]};
+        #list deathSummary_eternal_gxp add {$deathReport[eternal_gxp]};
+        #list deathSummary_eternal_erad add {$deathReport[eternal_erad]};
         
 
         #if {"$guild" == "necromancer"} {

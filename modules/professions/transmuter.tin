@@ -235,7 +235,7 @@
                 transmute 2 $item_name quality to average;
                 stash all;
             } {
-                #if {$transmuter[level] >= 50} {
+                #if {$transmuter[level] == 100} {
                     #if {"$quality" == "average"} {
                         #2 unstash average $item_name;
                         transmute 2 $item_name quality to good;
@@ -253,8 +253,8 @@
                     };
                 } {
                     #if {"$quality" == "average"} {
-                        #2 unstash average $item_name;
-                        transmute 2 $item_name quality to good;
+                        #3 unstash average $item_name;
+                        transmute 3 $item_name quality to good;
                         stash all;
                     };
                     #if {"$quality" == "good"} {

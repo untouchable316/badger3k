@@ -441,6 +441,7 @@
 .add_speedrun {necro_lab} {misc} {52319} {Necro: Vamp Lab (Bloodfuse Potions)};
 .add_speedrun {necro_lich} {misc} {7671} {Necro Guild: Lich Library};
 .add_speedrun {necro_old} {misc} {7523} {Necro: Old Guild Hall};
+.add_speedrun {necro_meditate} {misc} {7639} {Necro: Pyool the ancient (meditate to advance circles)};
 
 .add_speedrun {priest_box} {misc} {25379} {Priest Guild: EQ Box};
 .add_speedrun {priest_reagents} {misc} {25408} {Priest Guild: Reagent Room};

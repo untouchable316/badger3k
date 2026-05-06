@@ -257,6 +257,7 @@
 	#var mapstatic 1;
 	#var mapping on;
 }
+
 #alias {.map_restore_static_if_not_mapping} {#if {"$mapping" != "on"} {#map flag static on};};
 
 #alias {mapoff}{

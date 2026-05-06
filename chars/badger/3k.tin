@@ -10,6 +10,7 @@
 #var player4 badgerfremen;
 #var player5 badgermental;
 #var player6 badgermonk;
+#var player7 badgernecro;
 
 #NOP -- Menu: press 1-5 to load that char file;
 #echo {1: $player1};
@@ -18,6 +19,7 @@
 #echo {4: $player4};
 #echo {5: $player5};
 #echo {6: $player6};
+#echo {7: $player7};
 
 #NOP -- Macro: read chars/badger/<name>.tin then unmacro;
 #macro {1} {#read chars/badger/$player1.tin;unmacro};
@@ -26,6 +28,7 @@
 #macro {4} {#read chars/badger/$player4.tin;unmacro};
 #macro {5} {#read chars/badger/$player5.tin;unmacro};
 #macro {6} {#read chars/badger/$player6.tin;unmacro};
+#macro {7} {#read chars/badger/$player7.tin;unmacro};
 
 #NOP -- When you disconnect, menu shows again;
 #event {SESSION DEACTIVATED} {
@@ -35,6 +38,7 @@
     #echo {4: $player4};
     #echo {5: $player5};
     #echo {6: $player6};
+    #echo {7: $player7};
 };
 
 #alias {unmacro} {#unmacro {%d}};

@@ -5,6 +5,8 @@
 #var check_room 0;
 #var toggle_portal_room 1;
 #var toggle_portal_room_empty 1;
+#var bot[zodiac_bt] 0;
+#var bot[zodiac_purge_kill] 0;
 
 #NOP -- mobs are good, set rolm to demon;
 touch demon rune;
@@ -241,6 +243,98 @@ touch demon rune;
 #action {Monk's Dormitory \(w,s,nw,ne\)} {#if {$bot[foundmob] == 1} {return};#unact {Monk's Dormitory \(w,s,nw,ne\)};.chest_action} {1};
 #action {Chamber of the chest \(e,sw\)} {#if {$bot[foundmob] == 1} {return};#unact {Chamber of the chest \(e,sw\)};.chest_action} {1};
 #action {Explorer's Lounge \(e,sw\)} {#if {$bot[foundmob] == 1} {return};#unact {Explorer's Lounge \(e,sw\)};.chest_action} {1};
+
+#alias {.zodiac_resume_normal} {
+    #var bot[zodiac_bt] 0;
+    #var bot[zodiac_purge_kill] 0;
+    .unpause;
+    ..;
+};
+
+#alias {.zodiac_resume_backtrack} {
+    .pause;
+    glance;
+    #delay 2 {.zodiac_after_glance};
+};
+
+#alias {.zodiac_physical_backstep} {
+    #if {"$bot[zodiac_bt]" != "1"} {#return};
+    #if {$bot[step] <= 1} {#return};
+    #math {_zidx} {$bot[step] - 1};
+    #if {$_zidx < 1} {#return};
+    #list {bot[steps]} {get} {$_zidx} {zodiac_tok};
+    #format {zodiac_tok} {%p} $zodiac_tok;
+    #map get roomvnum zodiac_curv;
+    #if {"$zodiac_tok" == "u" && "$zodiac_curv" != "$bot[start_vnum]"} {
+        .zodiac_resume_normal;
+        #return;
+    };
+    #switch {"$zodiac_tok"} {
+        #case {"n"} {#send s};
+        #case {"s"} {#send n};
+        #case {"e"} {#send w};
+        #case {"w"} {#send e};
+        #case {"ne"} {#send sw};
+        #case {"nw"} {#send se};
+        #case {"se"} {#send nw};
+        #case {"sw"} {#send ne};
+        #case {"u"} {#send d};
+        #case {"d"} {#send u};
+        #case {"enter"} {#send out};
+        #case {"out"} {#send enter};
+        #case {"portal"} {#send portal};
+        #case {"swim"} {#send swim};
+        #case {"light"} {#nop};
+        #default {
+            #var bot[zodiac_bt] 0;
+            .unpause;
+            #showme {Zodiac backstep unknown token $zodiac_tok};
+            ..;
+        };
+    };
+    #if {"$bot[zodiac_bt]" == "1"} {
+        #math {bot[step]} {$bot[step] - 1};
+        #var {bot[walk]} {0};
+    };
+};
+
+#alias {.zodiac_after_glance} {
+    #if {"$bot[zodiac_bt]" != "1"} {#return};
+    #map get roomvnum zodiac_curv;
+    #if {"$zodiac_curv" == "$bot[start_vnum]"} {
+        .zodiac_resume_normal;
+        #return;
+    };
+    #if {$bot[foundmob]} {
+        #if {"$mob[target]" == "soul" || "$mob[target]" == "colossus" || "$mob[target]" == "mimic"} {
+            #var bot[zodiac_purge_kill] 1;
+            .unpause;
+            .determineBotAction;
+        } {
+            #var bot[zodiac_bt] 0;
+            .unpause;
+            .determineBotAction;
+        };
+    } {
+        #if {$bot[step] <= 1} {
+            #showme {Zodiac: celestial backtrack found no listed mob};
+            .zodiac_resume_normal;
+        } {
+            .pause;
+            .zodiac_physical_backstep;
+            #delay .3 {glance};
+            #delay 2 {.zodiac_after_glance};
+        };
+    };
+};
+
+#action {^You cannot leave while there are still celestials present on this level.$} {
+    #var bot[zodiac_bt] 1;
+    .pause;
+    mapUndo;
+    #delay .3 {glance};
+    #delay 2 {.zodiac_after_glance};
+} {1};
 
 #class {bot} {close};
 #read common/bot/generic.tin;

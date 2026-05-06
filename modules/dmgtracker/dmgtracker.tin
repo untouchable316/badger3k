@@ -260,9 +260,6 @@ dreset;
     #var cmbt[affects][shield_bash] 1;
 } {2};
 
-#action {^A bolt of pure energy flies out of the sky striking %*!$} {
-    #var cmbt[affects][eradication] 1;
-} {2};
 
 #action {^With iron will, you finally guide the deadly spell toward its target!$} {
     #var cmbt[affects][iprime] 1;

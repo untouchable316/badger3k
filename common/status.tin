@@ -86,6 +86,7 @@
     #var mob[class] 0;
     #var mob[gremlin] 0;
     #var mob[shred] 0;
+    #var mob[eternal_erad] 0;
 
     #var enemy[last_round] 1;
     #var enemy[round_change] 0;
