@@ -14,17 +14,16 @@
 
 #NOP -- Variables for the chat categories;
 #var chatCategory general;
-#var chat[general] {};
-#var chat[tells] {};
-#var chat[clan] {};
-#var chat[guild] {};
-#var chat[high_mortal] {};
-#var chat[party] {};
+#unvar chat[general];
+#unvar chat[tells];
+#unvar chat[clan];
+#unvar chat[guild];
+#unvar chat[high_mortal];
+#unvar chat[party];
 
 #var payloadStack {};
 
 #alias postChatCategory {
-	#var chat[${chatCategory}] ${discordText};
 	#if {&chat[${chatCategory}][] >= $chat[max]} {
 		#list chat[${chatCategory}] del 1;
 	};
@@ -94,8 +93,8 @@
 };
 
 #alias filterSpam {
-	#foreach $ignoreMisc {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tell] filter {} {%*${item}%*};};
-	#foreach $ignoreEmotes {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tell] filter {} {%*${item}%*};};
+	#foreach $ignoreMisc {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tells] filter {} {%*${item}%*};};
+	#foreach $ignoreEmotes {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tells] filter {} {%*${item}%*};};
 };
 
 #NOP ***** Broadcast Communication (Chat/Shout) *****;
@@ -777,7 +776,6 @@
 	#math chat[start]	{$chat[rows]};
 	#math chat[end]		{$chat[offset] + 1};
 
-	filterSpam;
 	updateChatCategory;
 	#if {"$draw[chat][active]" == "on"} {
 		#line sub var #line sub esc #draw $theme[chatbox] left right side 2 1 $chat[height]-1 $chat[right] $chat[general][-$chat[start]..-$chat[end]];
@@ -796,12 +794,14 @@
 	#replace {chat[text]} {\\x7B} {\uFF5B};
 	#replace {chat[text]} {\\x7D} {\uFF5D};
 	
-	#list chat[general] ins -1 {${timestamp}${chat[text]}};
+	#var chat[entry] ${timestamp}${chat[text]};
+	#list chat[general] ins -1 $chat[entry];
 	#var discordText ${mip[comm][source]}: ${mip[comm][data]};
 	#if {$discordPost && !$mipgag} {
 		postDiscord ${discordText};
 	};
 	#if {"$chatCategory" != "general"} {postChatCategory};
+	filterSpam;
 	draw_chat;
 };
 

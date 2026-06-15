@@ -19,6 +19,50 @@
 	#var my[fish_catch_level] 30;
 };
 
+#list fish[journal] clear;
+#alias .updateFishingJournal {
+	#format tmpOutcome {%n} {%1};
+	#format tmpAction {%n} {$fish[final-action]};
+	#format tmpCatch {%n} {$fish[catch-peak]};
+
+	#if {"%2" == ""} {
+		#format tmpFish {%n} {No Fish};
+ 		#echo {<bfc> Fish Conclusion: Unfortunately you did not catch a fish.  Your final action was to $fish[final-action].};
+	} {		
+		#format tmpFish {%n} {$fish[tmpFish]};
+		#echo {<bfc> Fish Conclusion: You caught a %2!};
+	};
+
+	#list fish[journal] add {{{outcome} {$tmpOutcome} {action} {$tmpAction} {catch} {$tmpCatch} {fish} {$tmpFish}}};
+	#unvar tmpFish;
+};
+
+#alias fishlog {
+	#var tmpItem 1;
+    #echo {   <aed>===============================================================================<088>};
+    #echo {   <aed>                            BYRON'S FISH TALES  <088>};
+    #echo {   <bde>   ><(((('>      <aeb>~ The fish may flee, but the lure remains. ~      <bde><'))))>< <088>};
+    #echo {   <aed>=============================================================================== <088>};
+	#if {&fish[journal][] > 0} {
+		#format row {         %-15s  %-15s  %-10s  %-16s } {<aef>Outcome} {Final Action} {Top Catch %} {Fish Caught<088>};
+		#echo $row;
+		#loop 1 &fish[journal][] tmpItem {
+			#format row {          %-15s  %-15s  %-10s    %-16s } {$fish[journal][$tmpItem][outcome]} {$fish[journal][$tmpItem][action]} {   $fish[journal][$tmpItem][catch]} {$fish[journal][$tmpItem][fish]};
+			#echo $row;
+		};
+	} {
+			#echo {};
+			#echo {   <aee>                     A lonely bard upon the strand};
+			#echo {   <aee>                  Cast hopeful lines with patient hand.};
+			#echo {   <aee>                  The sea replied with wind and spray,};
+			#echo {   <aee>                     And carried all his bait away.};
+			#echo {};
+			#echo {   <aed>          This journal currently carries all tales and no scales...};
+	};
+    #echo {};
+    #echo {   <aed>===============================================================================<088>};
+};
+
 #alias .setCatchLevel {
 	#if {"%1" == ""} {
 		#echo {    <dec>No level provided.  Provide a number 1-99 that should you catch the fish at.<088>};
@@ -48,6 +92,7 @@
 		#echo {<faa>THE FISH WIGGLED FREE!<088>};
 		#draw Yellow scroll line 1 1 1 65;
 		#math fish[fail-wriggle] {$fish[fail-wriggle] + 1};
+		.updateFishingJournal {wriggled free};
 	};
 } {2};
 
@@ -59,6 +104,7 @@
 		#echo {<faa>THE FISH WIGGLED FREE!<088>};
 		#draw Yellow scroll line 1 1 1 65;
 		#math fish[fail-wriggle] {$fish[fail-wriggle] + 1};
+		.updateFishingJournal {wriggled free};
 	};
 } {2};
 
@@ -68,6 +114,7 @@
 		fish;
 		#var fish[catch-peak] 0;
 		#math fish[fail] {$fish[fail] + 1};
+		.updateFishingJournal {failed to retrieve catch};
 	};
 } {2};
 
@@ -80,6 +127,18 @@
 		#echo {<fff>YOU CAUGHT SOMETHING!<088>};
 		#draw Yellow scroll line 1 1 1 65;
 		#math {fish[success]} {$fish[success] + 1};
+
+		#line oneshot #action {{^.*(fish|scale|lobster): Ok\.$}} {
+			#if {!$idle_flag} {
+				#draw Yellow scroll line 1 1 1 65;
+				#echo {<fff>YOU CAUGHT A FISH!!!!<088>};
+				#draw Yellow scroll line 1 1 1 30;
+				#math {fish[caught]} {$fish[caught] + 1};
+				#var tmpFish %1;
+				#replace tmpFish {: Ok.} {};
+				.updateFishingJournal {Caught} {$tmpFish};
+			};
+		} {2};
 	};
 } {2};
 
@@ -87,20 +146,11 @@
 	#math fish[advancement] {$fish[advancement] + 1};
 } {2};
 
-#action {{^.*(fish|scale|lobster): Ok\.$}} {
-	#if {!$idle_flag} {
-		#draw Yellow scroll line 1 1 1 65;
-		#echo {<fff>YOU CAUGHT A FISH!!!!<088>};
-		#draw Yellow scroll line 1 1 1 30;
-		#math {fish[caught]} {$fish[caught] + 1};
-	};
-} {2};
-
 
 #action {^You're too tired to do that.} {
 	#if {!$idle_flag} {
 		cease;
-		#echo {<bfc> Fish Conclusion: Ceasing - Highest Catch % = $fish[catch-peak]};
+		#var fish[final-action] cease;
 		#send !fish;
 		#var fish[catch-peak] 0;
 	};
@@ -207,26 +257,26 @@
 		#if {$fish[catch] == "H"} {
 			#var fish[catch-peak] H;
 			#send !catch;
-			#echo {<bfc> Fish Conclusion: Catching - Highest Catch % = $fish[catch-peak]};
+			#var fish[final-action] catch;
 		};
 		#elseif {$fish[catch] == "M"} {
 			#var fish[catch-peak] M;
+			#var fish[final-action] catch;
 			#send !catch;
-			#echo {<bfc> Fish Conclusion: Catching - Highest Catch % = $fish[catch-peak]};
 		};
 		#elseif {$fish[req] + 40 > $fish[end] && $fish[catch] > $my[fish_catch_level]} {
+			#var fish[final-action] catch;
 			#send !catch;
-			#echo {<bfc> Fish Conclusion: Catching - Highest Catch % = $fish[catch-peak]};
 		};
 		#elseif {$fish[catch] > $my[fish_catch_level]} {
+			#var fish[final-action] catch;
 			#send !catch;
-			#echo {<bfc> Fish Conclusion: Catching - Highest Catch % = $fish[catch-peak]};
 		};
 
 		#if {"$fish[dist]" == "H"} {#var fish[dist] 200};
 		#if {$fish[end] < $fish[req]} {
+			#var fish[final-action] cease;
 			#send !cease;
-			#echo {<bfc> Fish Conclusion: Ceasing - Highest Catch % = $fish[catch-peak]};
 		};
  		#if {$fish[ten] > 30 || "$fish[ten]" == "H" } {#send !slack};
 		
@@ -243,6 +293,7 @@
 				bait rod;
 				fish;
 				#math fish[break-rod] {$fish[break-rod] + 1};
+				.updateFishingJournal {Broken Rod};
 			};
 		} {2};
 	
@@ -252,6 +303,7 @@
 				bait rod;
 				fish;
 				#math fish[break-line] {$fish[break-line] + 1};
+				.updateFishingJournal {Line Broken};
 			};
 		} {2};
 
@@ -261,6 +313,7 @@
 				bait rod;
 				fish;
 				#math fish[break-line] {$fish[break-line] + 1};
+				.updateFishingJournal {Line Broken};
 			}
 		} {2};
 	};
