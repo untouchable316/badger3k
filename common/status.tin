@@ -108,6 +108,16 @@
     };
 };
 
+#alias _bootVar_import {
+    #read vars/boot.tin;
+    #var doorcombos $xdoorcombos;
+};
+
+#alias _bootVar_export {
+    #class bootVars write vars/boot.tin;
+    #echo {  <dee>3kdb:  Boot variables have been updated.<088>};
+};
+
 #alias _variable_export {
     #class global open;
     #map get roomvnum xcurvnum;
