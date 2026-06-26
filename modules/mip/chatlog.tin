@@ -1,5 +1,5 @@
-#class {mipchatlog} {kill}
-#class {mipchatlog} {open}
+#class {mipchatlog} {kill};
+#class {mipchatlog} {open};
 
 #NOP -- Discord Message Sending;
 #NOP -- Update the below with the webhook URL for each particular discord channel;
@@ -14,17 +14,16 @@
 
 #NOP -- Variables for the chat categories;
 #var chatCategory general;
-#var chat[general] {};
-#var chat[tells] {};
-#var chat[clan] {};
-#var chat[guild] {};
-#var chat[high_mortal] {};
-#var chat[party] {};
+#unvar chat[general];
+#unvar chat[tells];
+#unvar chat[clan];
+#unvar chat[guild];
+#unvar chat[high_mortal];
+#unvar chat[party];
 
 #var payloadStack {};
 
 #alias postChatCategory {
-	#var chat[${chatCategory}] ${discordText};
 	#if {&chat[${chatCategory}][] >= $chat[max]} {
 		#list chat[${chatCategory}] del 1;
 	};
@@ -94,8 +93,8 @@
 };
 
 #alias filterSpam {
-	#foreach $ignoreMisc {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tell] filter {} {%*${item}%*};};
-	#foreach $ignoreEmotes {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tell] filter {} {%*${item}%*};};
+	#foreach $ignoreMisc {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tells] filter {} {%*${item}%*};};
+	#foreach $ignoreEmotes {item} {#list chat[general] filter {} {%*${item}%*};#list chat[tells] filter {} {%*${item}%*};};
 };
 
 #NOP ***** Broadcast Communication (Chat/Shout) *****;
@@ -109,7 +108,7 @@
 	#NOP Gentech Notify Line;
 		#REGEX {%0} {gnotify~Notify~%*~[Gen-Nofity]: } {#var mipgag 1};
 
-	#IF {$mipgag == 0} {.mipProcessCAA %0}
+	#IF {$mipgag == 0} {.mipProcessCAA %0};
 };
 
 #alias {.handleCommLine} {
@@ -118,6 +117,8 @@
 	#var tmpCommClan 0;
 	#var tmpCommParty 0;
 	#var tmpCommHM 0;
+
+	#var tmpProcessComm 1;
 	#switch {"$tmpCommLine"} {
 		#NOP -- Some of these might be guild lines, if they are update to the guild below;
 		#case {"Auction"}      	  	{#var {commcol} {${theme[chatcolor][auction]}}};
@@ -175,28 +176,28 @@
 		#case {"BreedOOC"}          {#var {commcol} {<258>};#var tmpCommGuild 1};
 		
 		#NOP -- Cyborg;
-		#case {"Cyborg Com"}        {#var {commcol} {<138>};#var tmpCommGuild 1};
-		#case {"Cyborg Death"}      {#var {commcol} {<218>};#var tmpCommGuild 1};
-		#case {"Cyborg Guild"}      {#var {commcol} {<228>};#var tmpCommGuild 1};
-		#case {"Cyborg Notify"}     {#var {commcol} {<268>};#var tmpCommGuild 1};
-		#case {"Cyborg Syndicate"}  {#var {commcol} {<128>};#var tmpCommGuild 1};
+		#case {"Cyborg Com"}        {#var {commcol} {${theme[chatcolor][gline]}};#var tmpCommGuild 1};
+		#case {"Cyborg Syndicate"}  {#var {commcol} {${theme[chatcolor][gline]}};#var tmpCommGuild 1};
+		#case {"Cyborg Death"}      {#var tmpProcessComm 0;}; #NOP -- block so login, logout, training, etc doesnt spam;
+		#case {"Cyborg Guild"}      {#var tmpProcessComm 0;}; #NOP -- block so login, logout, training, etc doesnt spam;
+		#case {"Cyborg Notify"}     {#var tmpProcessComm 0;}; #NOP -- block so login, logout, training, etc doesnt spam;
 
 		#NOP -- Elemental;
-		#case {"EL-75"} 			{#var {commcol} {<178>};#var tmpCommGuild 1};
+		#case {"EL-75"} 			{#var {commcol} {<118>};#var tmpCommGuild 1};
 		#case {"Main"} 				{#var {commcol} {<118>};#var tmpCommGuild 1};
-		#case {"Megamental"} 		{#var {commcol} {<178>};#var tmpCommGuild 1};
-		#case {"Mental Adept"}		{#var {commcol} {<178>};#var tmpCommGuild 1};
-		#case {"Mental Master"} 	{#var {commcol} {<178>};#var tmpCommGuild 1};
-		#case {"S100"} 				{#var {commcol} {<178>};#var tmpCommGuild 1};
-		#case {"Spirit"} 			{#var {commcol} {<178>};#var tmpCommGuild 1};
-		#case {"Time"}            	{#var {commcol} {<168>};#var tmpCommGuild 1};
+		#case {"Megamental"} 		{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Mental Adept"}		{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Mental Master"} 	{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"S100"} 				{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Spirit"} 			{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Time"}            	{#var {commcol} {<118>};#var tmpCommGuild 1};
 
 		#NOP -- Eternal;
 		#case {"Eternal Main"}      {#var {commcol} {<158>};#var tmpCommGuild 1};
 
 		#NOP Fremen;
 		#case {"Fremen Tp"}    		{#var {commcol} {<128>};#var tmpCommGuild 1};
-		#case {"Fremen Guild"}    	{#NOP -- block so guild skill training etc doesnt spam;};
+		#case {"Fremen Guild"}    	{#var tmpProcessComm 0;}; #NOP -- block so guild skill training etc doesnt spam;
 		#case {"Fremen Ntp"}    	{#var {commcol} {<128>};#var tmpCommGuild 1};
 		#case {"Fremen Rtp"}    	{#var {commcol} {<128>};#var tmpCommGuild 1};
 
@@ -207,7 +208,7 @@
 		#case {"Ggent"}          	{#var {commcol} {<168>};#var tmpCommGuild 1};
 		#case {"Gamma"}          	{#var {commcol} {<168>};#var tmpCommGuild 1};
 		#case {"Offense"}          	{#var {commcol} {<168>};#var tmpCommGuild 1};
-		#case {"Notify"}          	{#NOP -- block so echelon etc doesnt spam;};
+		#case {"Notify"}          	{#var tmpProcessComm 0;}; #NOP -- block so echelon etc doesnt spam;
 		#case {"Sci"}          		{#var {commcol} {<168>};#var tmpCommGuild 1};
 
 
@@ -246,14 +247,14 @@
 
 
 		#NOP -- Monk;
-		#case {"Monk"}            	{#var {commcol} {<238>};#var tmpCommGuild 1};
+		#case {"Monk"}            	{#var {commcol} {<118>};#var tmpCommGuild 1};
 
 		#NOP -- Necromancer;
-		#case {"Lich"}            	{#var {commcol} {<158>};#var tmpCommGuild 1};
-		#case {"Gnecr"}            	{#var {commcol} {<158>};#var tmpCommGuild 1};
-		#case {"Necro"}            	{#var {commcol} {<158>};#var tmpCommGuild 1};
-		#case {"Sphere-%*"}      	{#var {commcol} {<158>};#var tmpCommGuild 1};
-		#case {"Were"}            	{#var {commcol} {<158>};#var tmpCommGuild 1};
+		#case {"Lich"}            	{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Gnecr"}            	{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Necro"}            	{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Sphere-%*"}      	{#var {commcol} {<118>};#var tmpCommGuild 1};
+		#case {"Were"}            	{#var {commcol} {<118>};#var tmpCommGuild 1};
 
 		#NOP -- Priest;
 		#case {"Bitch"}        		{#var {commcol} {<168>};#var tmpCommGuild 1};
@@ -261,8 +262,8 @@
 		#case {"Gprie"}      	    {#var {commcol} {<158>};#var tmpCommGuild 1};
 		#case {"Light Path"}      	{#var {commcol} {<158>};#var tmpCommGuild 1};
 		#case {"Priest"}      	    {#var {commcol} {<158>};#var tmpCommGuild 1};
-		#case {"Priest Announce"}   {#NOP -- block this line from logging;};
-		#case {"Priest Broadcast"}  {#NOP -- block this line from logging;};
+		#case {"Priest Announce"}   {#var tmpProcessComm 0;}; #NOP -- block this line from logging;
+		#case {"Priest Broadcast"}  {#var tmpProcessComm 0;}; #NOP -- block this line from logging;
 		
 		#NOP -- Psicorps;
 		#case {"Psi Main"}        	{#var {commcol} {<168>};#var tmpCommGuild 1};
@@ -314,27 +315,34 @@
 		#var discordChannel $webhook[url][general];
 		.handleCommLine {$mip[comm][line]};
 		
-		#var {mip[comm][cdata]} {$mip[comm][data]};
-		#replace {mip[comm][cdata]} {:} {:<099>};
-		#replace {mip[comm][cdata]} {]} {]<099>};
-		
-		#var {mip[comm][cdata]} {${commcol}${mip[comm][cdata]}<099>};
-
-		#NOP if it's the same as the last line, do nothing to prevent spam;
-		#if {"$mip[comm][cdata]" != "$lastData"} {
-			#line log {logs/$sysUser/$datestamp} {$timestamp\};
-			#line log {logs/$sysUser/$datestamp} {$mip[comm][cdata]};
-			_mip_chat_sender_blacklisted;
-			#if {$_mip_blacklist_hit == 1} {
-				#NOP Blacklisted: still log and Discord, only skip chat window;
-				#var discordText ${mip[comm][source]}: ${mip[comm][data]};
-				#if {$discordPost && !$mipgag} {postDiscord ${discordText}};
-				#if {"$chatCategory" != "general"} {postChatCategory};
+		#if $tmpProcessComm {
+			#var {mip[comm][cdata]} {$mip[comm][data]};
+			#if {"$mip[comm][line]" == "Cyborg Com"} {
+				#replace {mip[comm][cdata]} {COM::%w :} {COM::&4 :<099>};
 			} {
-				update_chat {$mip[comm][cdata]};
+				#replace {mip[comm][cdata]} {:} {:<099>};
+				#replace {mip[comm][cdata]} {]} {]<099>};
+			};
+			
+			
+			#var {mip[comm][cdata]} {${commcol}${mip[comm][cdata]}<099>};
+
+			#NOP if it's the same as the last line, do nothing to prevent spam;
+			#if {"$mip[comm][cdata]" != "$lastData"} {
+				#line log {logs/$sysUser/$datestamp} {$timestamp\};
+				#line log {logs/$sysUser/$datestamp} {$mip[comm][cdata]};
+				_mip_chat_sender_blacklisted;
+				#if {$_mip_blacklist_hit == 1} {
+					#NOP Blacklisted: still log and Discord, only skip chat window;
+					#var discordText ${mip[comm][source]}: ${mip[comm][data]};
+					#if {$discordPost && !$mipgag} {postDiscord ${discordText}};
+					#if {"$chatCategory" != "general"} {postChatCategory};
+				} {
+					update_chat {$mip[comm][cdata]};
+				};
 			};
 		};
-	}
+	};
 };
 
 #NOP ***** 2 Way Communication (Tell/Emote) *****;
@@ -361,7 +369,7 @@
 		#if {$discordPost && !$mipgag} {postDiscord ${discordText}};
 		#if {"$chatCategory" != "general"} {postChatCategory};
 	} {update_chat <178>$mip[comm][source]<088>: $mip[comm][data]};
-	#delay 10 {#unvar chat[act_tell][from]}
+	#delay 10 {#unvar chat[act_tell][from]};
 } {2};
 
 #NOP -- Breed projection;
@@ -387,7 +395,7 @@
 		#if {$discordPost && !$mipgag} {postDiscord ${discordText}};
 		#if {"$chatCategory" != "general"} {postChatCategory};
 	} {update_chat <178>$mip[comm][source]<088>: $mip[comm][data]};
-	#delay 10 {#unvar chat[act_tell][from]}
+	#delay 10 {#unvar chat[act_tell][from]};
 } {2};
 
 
@@ -406,6 +414,7 @@
 	#var logSay 1;
 	#regex $tmpText {%*, %* always} {#var logSay 0};
 	#regex $tmpText {all, you are now in group %*} {#var logSay 0};
+	#regex $tmpText {golem, %*} {#var logSay 0};
 	#regex $tmpText {%*, ibc} {#var logSay 0};
 	#regex $tmpText {Brigga Bragga! Hizzie wizzie snizzie lizzie! CHOWDA CHOWDA CHOWDA!!!!} {#var logSay 0};
 	#regex $tmpText {Wizza Wazza! Da bibble for rizzle Wikkie Wakky Yakko Wakko and Dot!} {#var logSay 0};
@@ -490,7 +499,7 @@
 			} {
 				#var chat[log][emotes] 1;
 				#echo {<cfa> ========== CHATLOG IS NOW LOGGING EMOTES ========== };
-			}
+			};
 		};
 	};
 };
@@ -767,7 +776,6 @@
 	#math chat[start]	{$chat[rows]};
 	#math chat[end]		{$chat[offset] + 1};
 
-	filterSpam;
 	updateChatCategory;
 	#if {"$draw[chat][active]" == "on"} {
 		#line sub var #line sub esc #draw $theme[chatbox] left right side 2 1 $chat[height]-1 $chat[right] $chat[general][-$chat[start]..-$chat[end]];
@@ -786,12 +794,14 @@
 	#replace {chat[text]} {\\x7B} {\uFF5B};
 	#replace {chat[text]} {\\x7D} {\uFF5D};
 	
-	#list chat[general] ins -1 {${timestamp}${chat[text]}};
+	#var chat[entry] ${timestamp}${chat[text]};
+	#list chat[general] ins -1 $chat[entry];
 	#var discordText ${mip[comm][source]}: ${mip[comm][data]};
 	#if {$discordPost && !$mipgag} {
 		postDiscord ${discordText};
 	};
 	#if {"$chatCategory" != "general"} {postChatCategory};
+	filterSpam;
 	draw_chat;
 };
 
@@ -818,18 +828,18 @@
 			#math chat[page] {$chat[page] - 1};
 			#math chat[offset] {$chat[page] * $chat[rows] - $chat[rows]};
 			draw_chat;
-		}
+		};
 	}; #elseif {"$chat[scroll]" == "line"} {
 		#if {$chat[offset] > 0} {
 			#math chat[offset] {$chat[offset] - 1};
 			draw_chat;
-		}
-	}
+		};
+	};
 };
 #ALIAS {chatend} {
 	#var chat[page] 1;
 	#var chat[offset] 0;
-	draw_chat
+	draw_chat;
 };
 
-#class {mipchatlog} {close}
+#class {mipchatlog} {close};

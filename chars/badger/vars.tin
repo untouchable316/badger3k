@@ -1,11 +1,12 @@
 #CLASS {global} OPEN
 
+#VARIABLE {_blidx} {2}
 #VARIABLE {blacklist}
 {
     {1} {Bink}
     {2} {Caeli}
 }
-#VARIABLE {result} {1}
+#VARIABLE {result} {10.8M}
 #VARIABLE {xblacklist}
 {
     {1} {Bink}
@@ -13,18 +14,19 @@
 }
 #VARIABLE {xcaption}
 {
-    {bottom} {-8}
+    {bottom} {-9}
     {left} {112}
     {tab} {general}
     {top} {19}
 }
 #VARIABLE {xcaption_data}
 {
-    {1} {\n <088>💀 <ceb>103 <088>Corpses 💀\n C: 49 I: 1 F: 50 Clr: 3}
-    {2} {\n <fff>Eternal: <bfa>EWELL<088> <bfa>HEAL<088> <bfa>SHRED<088> <bfa>DUPE-C<088> <bfa>ENLARGE<088> <bfa>FRY<088> <bfa>PROT<088><088>}
-    {3} {\n \n <ccc>Bot: <fff>OFF<088>}
-    {4} {\n <bef>Strategy:<088> <afa>Call<088> <afa>Spark<088>}
-    {5} {\n \n <cde>Bot Cycler: <fac>N/A<088>}
+    {1} {<088>💀 <ceb>46 <088>Corpses 💀\n C: 46}
+    {2} {\n <fff>Eternal: <bfa>EWELL<088> <bfa>HEAL<088> <bfa>SHRED<088> <bfa>DUPE-C<088> <bfa>ENLARGE<088> <faa>FRY<088> <bfa>PROT<088><088>}
+    {3} {\n <ccc>Bot: <fff>OFF<088>}
+    {4} {\n <bef>Strategy:<088> <afa>Slow<088> <afa>Golem_assist<088> <afa>Summon_mf<088> <afa>Spelltap<088> <afa>Gstrength<088> <afa>Shoosummons<088> <afa>Rolm<088> <afa>Epowers<088>}
+    {5} {\n <cde>Bot Cycler: <fac>N/A<088>}
+    {6} {\n }
 }
 #VARIABLE {xchat}
 {
@@ -37,63 +39,51 @@
 {
     {1} 
     {
+        {action} {cast spell tap on corpse}
+        {active} {1}
+        {name} {spelltap}
+    }
+    {2} 
+    {
         {action} {wrap remains}
         {active} {1}
         {name} {wrap}
     }
-    {2} 
-    {
-        {action} {slab remains}
-        {active} {1}
-        {name} {slab}
-    }
     {3} 
     {
-        {action} {cooler corpse}
+        {action} {cast corpse blast;cast corpse blast}
         {active} {1}
-        {name} {cooler corpse}
+        {name} {cBlast2}
     }
     {4} 
-    {
-        {action} {qtrance preserve get/preserve get/keep all preservation}
-        {active} {1}
-        {name} {preserve2}
-    }
-    {5} 
     {
         {action} {divvy gold}
         {active} {1}
         {name} {divvy}
     }
-    {6} 
+    {5} 
     {
         {action} {get all}
         {active} {1}
         {name} {getAll}
     }
-    {7} 
+    {6} 
     {
         {action} {stash all;keep all component}
         {active} {1}
         {name} {crafting}
     }
+    {7} 
+    {
+        {action} {study spellbook}
+        {active} {1}
+        {name} {study spellbook}
+    }
     {8} 
     {
-        {action} {con}
+        {action} {cuddle bear}
         {active} {1}
-        {name} {conWorth}
-    }
-    {9} 
-    {
-        {action} {bag1}
-        {active} {1}
-        {name} {bag1}
-    }
-    {10} 
-    {
-        {action} {love bear}
-        {active} {1}
-        {name} {ted}
+        {name} {ted2}
     }
 }
 #VARIABLE {xcurvnum} {1}
@@ -219,20 +209,20 @@
     {14} 
     {
         {active} {0}
-        {header_text} {DS #}
-        {key} {dsave_count}
-        {lookup} {tmpPerMobDsaves}
-        {totals} {tmpTotalDsaves}
-        {width} {6}
+        {header_text} {Eternal GXP}
+        {key} {eternal_gxp}
+        {lookup} {tmpEternalGxp}
+        {totals} {tmpTotalEternalGxp}
+        {width} {15}
     }
     {15} 
     {
         {active} {0}
-        {header_text} {DS NP}
-        {key} {dsave_nps}
-        {lookup} {tmpPerMobDsaveNP}
-        {totals} {tmpTotalDsaveNP}
-        {width} {6}
+        {header_text} {SP Spent}
+        {key} {sp_spent}
+        {lookup} {tmpMobSpSpent}
+        {totals} {tmpTotalSpSpent}
+        {width} {8}
     }
 }
 #VARIABLE {xdeadmanIdleTimeout} {39960}
@@ -245,8 +235,8 @@
         {name} {ping}
     }
 }
-#VARIABLE {xdeadman_armed} {1}
-#VARIABLE {xdiscordPost} {0}
+#VARIABLE {xdeadman_armed} {$deadman_armed}
+#VARIABLE {xdiscordPost} {1}
 #VARIABLE {xdraw_room}
 {
     {bottom} {17}
@@ -260,152 +250,169 @@
     {combat_guild} {0}
     {combat_items} {0}
     {combat_numbers} {0}
-    {hpbar} {0}
+    {hpbar} {1}
 }
 #VARIABLE {xhpbar}
 {
     {bottom} {43}
-    {height} {5}
+    {height} {6}
     {prompt} 
     {
-        {1} {HP:51216/51216 SP:36278/36278 NP:34950/34950 E:     1%}
-        {2} {H:<008><AFA>   100%   <088> S:<008><AFA>   100%   <088> NP:<008><AFA>   100%   <088>  E:<070>     1%   <088>}
-        {3} {Status[w125%|pON|vON|r79%] Cr[65%] TG[3|0] $[301074]}
-        {4} {<dda>Prime:<faa>-<088>/2 <dda>Bfuse:<faa>-<088> (<faa>-<088>/<faa>-<088>/<faa>-<088>) <dda>Maim:<faa>-<088> <dda>Di/Nocturnum:<faa>-<088> <dda>GH:<faa>-<088> <dda>BA:<faa>-<088> }
-        {5} {<dda>Souls:<faa>-<088> <dda>Soulbind:<faa>-<088> <dda>Skullfire:<faa>-<088> <dda>CU:<faa>-<088> <dda>UG:<faa>-<088>}
+        {1} {<eeb>HP:<ffe>51287/51165 <eeb>SP:<ffe>19113/15506 <eeb>Sat:<ffe>   0/ 100  <eeb>C:<ffe>  31/ 100  <eeb>E:<ffe>      %<088>}
+        {2} {H:<008><AFA>   100%   <088> S:<006>   123%   <088> Sat:<070>     0%   <088> C:<008><EBA>   <070> 31%   <088> E:          <088>}
+        {3} {<eeb>Prots: <ffe><ACA><fff> GS <088> <eeb>Gem: <ffe>90%  <eeb>MC: <ffe>99% ASH: <ACA><fff>ALL<088><088>}
+        {4} {<eeb>Golem: 3/28%  <eeb>Super: <ffe>3/18%  <eeb>I: <ffe>2 <eeb>ST: <ffe>3/0 <eeb>G2N: <ffe>10.8M<088>}
+        {5} {<eeb>Gxp (1.85 Hrs): <dea>28.8K T-30 <dfe>|<dea> 28.8K/Hr <dfe>|<dea> 53.4K Total<088>}
+        {6} {Monsters(5) 💪<088>: <088><eab>(3) Devil<088>, <eab>Sprite<088>, <eab>Golem<088>}
     }
     {right} {166}
-    {top} {39}
+    {top} {38}
 }
 #VARIABLE {xlastBot}
 {
-    {curVnum} {46824}
-    {file} {pol}
-    {pause_room} {46824}
+    {area} {}
+    {curVnum} {53588}
+    {file} {czodiacs}
+    {pause_room} {53588}
 }
 #VARIABLE {xmap}
 {
     {bottom} {17}
-    {full} 
-    {
-        {startVnum} {46628}
-    }
-    {fullLower} {42}
     {height} {13}
     {left} {112}
     {top} {2}
     {width} {54}
     {widthperc} {.33}
 }
-#VARIABLE {xmkaActions} {}
+#VARIABLE {xmkaActions}
+{
+    {1} 
+    {
+        {action} {cast haste}
+        {active} {1}
+        {name} {haste}
+    }
+}
 #VARIABLE {xmy}
 {
     {casting} {mind warp}
-    {clan} {7}
-    {clan_max} {7}
-    {coins} {301074}
-    {corpse} 
-    {
-        {coffin} 
-        {
-            {current} {49}
-        }
-        {minion} 
-        {
-            {current} {}
-        }
-    }
+    {coins} {421038}
     {dead} {0}
-    {defs} 
-    {
-        {AB} {1}
-        {ab} {0}
-        {ag} {0}
-        {blink} {0}
-        {cs} {1}
-        {es} {0}
-        {fr} {0}
-        {hr} {0}
-        {hs} {0}
-        {m} {0}
-        {mb} {0}
-        {o} {0}
-        {pe} {0}
-        {pf} {0}
-        {pg} {0}
-        {ph} {0}
-        {pn} {0}
-        {r} {0}
-        {rf} {0}
-        {v} {0}
-    }
     {drunk} {1}
     {eternal} 
     {
         {duplicate creature} {1}
         {energy well} {1}
         {enlarge} {1}
-        {fry} {1}
+        {fry} {0}
+        {gxp} 
+        {
+            {current} {643374}
+            {last} {643563}
+            {last_fight} {189}
+        }
         {heal} {1}
         {protection} {1}
         {shred} {1}
     }
-    {g2n} {12262180}
-    {g2nl} {12}
+    {familiar} {Mushroom the beautiful swan}
+    {g2n} {10896540}
     {gem} {90}
     {golem} 
     {
         {active} {1}
         {current} {3}
-        {reset} {15}
+        {name} {Beetlejuice}
+        {reset} {28}
     }
     {gp1} 
     {
-        {change} {0}
-        {current} {34950}
-        {graph} {<008><AFA>   100%   <088>}
-        {max} {34950}
-        {name} {Grapefruit Points}
-        {percent} {1.00}
+        {change} {-1}
+        {current} {0}
+        {graph} {<070>     0%   <088>}
+        {max} {100}
+        {percent} {0.00}
     }
     {gp2} 
     {
-        {change} {2}
-        {current} {125}
-        {graph} {<008><AFA>   100%   <088>}
-        {max} {125}
-        {name} {}
-        {percent} {1.00}
+        {change} {1}
+        {current} {31}
+        {graph} {<008><EBA>   <070> 31%   <088>}
+        {max} {100}
+        {percent} {0.31}
     }
-    {guild} 
+    {gxp} 
     {
-        {donate_coins} {17875543}
+        {average} {16}
+        {average_per_hr} {28800}
+        {best} {34}
+        {delta-time} {1.85}
+        {g2n} 
+        {
+            {current} {10896540}
+            {last_round} {10896540}
+        }
+        {last_round} {0}
+        {report-time} {1779879262}
+        {rounds_tracked} {3207}
+        {start-time} {1779872608}
+        {starting_round} {0}
+        {str_average_per_hr} {28.8K}
+        {str_rounds} {3,207}
+        {str_t30_per_hr} {28.8K}
+        {str_time} {(1.85 Hrs)}
+        {str_total} {53.4K}
+        {t30} 
+        {
+            {1} {17}
+            {2} {17}
+            {3} {17}
+            {4} {17}
+            {5} {17}
+            {6} {17}
+            {7} {17}
+            {8} {17}
+            {9} {17}
+            {10} {17}
+            {11} {17}
+            {12} {17}
+            {13} {17}
+            {14} {17}
+            {15} {17}
+            {16} {17}
+            {17} {17}
+            {18} {17}
+            {19} {17}
+            {20} {17}
+            {21} {17}
+            {22} {17}
+            {23} {17}
+            {24} {17}
+            {25} {17}
+            {26} {17}
+            {27} {17}
+            {28} {17}
+            {29} {17}
+            {30} {17}
+            {31} {0}
+        }
+        {t30_average} {16}
+        {t30_per_hr} {28800}
+        {t30_total} {510}
+        {total} {53406}
     }
-    {gxp} {65}
     {hm} 
     {
-        {blast} {1}
-        {charm} {1}
-        {flee} {1}
         {heal} {1}
         {heal_other} {1}
-        {rejuvenate} {1}
-        {shield} {1}
-        {summon} {1}
-        {uncurse} {1}
     }
     {hp} 
     {
-        {change} {1995}
-        {current} {51216}
-        {fuse} 
-        {
-            {current} {0}
-            {max} {100}
-        }
+        {change} {0}
+        {current} {51287}
         {graph} {<008><AFA>   100%   <088>}
-        {max} {51216}
-        {percent} {1.00}
+        {max} {51165}
+        {percent} {1.01}
     }
     {immersion} 
     {
@@ -413,94 +420,14 @@
         {count} {2}
         {rounds} {0}
     }
-    {mental_cognition} {98}
-    {monk} 
-    {
-        {ae} 
-        {
-            {current} {4}
-            {reset} {10}
-        }
-        {gxp} {92009}
-    }
-    {necromancer} 
-    {
-        {decanters} 
-        {
-            {empty} {0}
-            {full} {0}
-            {powered} {0}
-        }
-        {glamors} 
-        {
-            {active} {}
-            {blazing} {0}
-            {current} {0}
-            {furious} {0}
-            {illuming} {0}
-            {max} {6}
-            {raging} {0}
-        }
-        {hp} 
-        {
-            {%} {}
-            {delta} {}
-        }
-        {hpfuse} 
-        {
-            {current} {}
-        }
-        {power} 
-        {
-            {} {}
-            {create dart} {0}
-            {create light} {0}
-            {dispell} {7}
-            {dream} {20}
-            {protection} {11}
-        }
-        {progress} {65}
-        {protection} {ON}
-        {reagent} 
-        {
-            {black pearl} {999}
-            {bloodmoss} {0}
-            {ginseng} {933}
-            {goldenrod} {962}
-            {mandrake} {950}
-            {pine needles} {999}
-            {spider web} {999}
-        }
-        {repower} 
-        {
-            {current} {79}
-        }
-        {spfuse} 
-        {
-            {current} {152}
-        }
-        {teleports} 
-        {
-            {current} {3}
-            {max} {3}
-        }
-        {undead} 
-        {
-            {hp} {}
-        }
-        {veil} {ON}
-        {worth} {125}
-    }
-    {nukes} {4}
-    {nukes_max} {4}
-    {prot} {ONX}
+    {mental_cognition} {99}
     {prots} 
     {
         {A} {0}
         {B} {0}
-        {GS} {0}
+        {GS} {1}
         {M} {0}
-        {MB} {1}
+        {MB} {0}
         {MG} {0}
         {MS} {0}
         {PA} {0}
@@ -513,36 +440,40 @@
         {SS} {0}
         {mg} {0}
     }
-    {song} 
-    {
-        {completion} {2}
-        {rounds} {0}
-    }
     {sp} 
     {
-        {change} {45}
-        {current} {36278}
-        {fuse} 
-        {
-            {current} {152}
-            {max} {152}
-        }
-        {graph} {<008><AFA>   100%   <088>}
-        {max} {36278}
-        {percent} {1.00}
+        {change} {-600}
+        {current} {19113}
+        {graph} {<006>   123%   <088>}
+        {max} {15506}
+        {percent} {1.23}
     }
     {spelltap} 
     {
-        {bonus} {5}
+        {bonus} {3}
         {corpses} {0}
-    }
-    {status} 
-    {
-        {laugh} {1}
     }
     {summons} 
     {
         {1} 
+        {
+            {count} {3}
+            {haste} {0}
+            {key} {Devil}
+            {mf} {1}
+            {name} {Devil}
+            {tanking} {0}
+        }
+        {2} 
+        {
+            {count} {1}
+            {haste} {0}
+            {key} {Sprite}
+            {mf} {1}
+            {name} {Sprite}
+            {tanking} {0}
+        }
+        {3} 
         {
             {count} {1}
             {haste} {0}
@@ -554,11 +485,10 @@
     }
     {super} 
     {
-        {current} {2}
-        {reset} {77}
+        {current} {3}
+        {reset} {19}
     }
-    {undead} {none}
-    {xp} {12242754270208}
+    {xp} {11124153550848}
 }
 #VARIABLE {xrolm}
 {
@@ -570,9 +500,9 @@
     {armillary} {1}
     {aurora} {1}
     {cairn} {1}
-    {charges} {186}
+    {charges} {151}
     {comet} {1}
-    {crown} {1}
+    {crown} {0}
     {diamond} {1}
     {dove} {1}
     {dragon} {1}
@@ -583,12 +513,12 @@
     {gremlin} {1}
     {heart} {1}
     {hp_regen} {0}
-    {infinity} {1}
+    {infinity} {0}
     {lasso} {1}
-    {last_reset} {1776697529}
+    {last_reset} {1779865124}
     {lightning} {1}
     {orrery} {1}
-    {owl} {1}
+    {owl} {0}
     {raven} {1}
     {reaper} {1}
     {scales} {1}
@@ -596,16 +526,16 @@
     {skull} {1}
     {sp_regen} {1}
     {spark} {1}
-    {star} {0}
-    {t1_reset} {1776609528}
-    {type} {Sword/Fire}
+    {star} {1}
+    {t1_reset} {}
+    {type} {Mace/Mind}
     {viper} {1}
     {winch} {1}
 }
 #VARIABLE {xspiceBeers} {$spiceBeers}
 #VARIABLE {xsplit}
 {
-    {bottom} {6}
+    {bottom} {7}
     {left} {0}
     {right} {55}
     {top} {12}
@@ -615,12 +545,42 @@
     {1} 
     {
         {active} {1}
-        {name} {call}
+        {name} {slow}
     }
     {2} 
     {
         {active} {1}
-        {name} {spark}
+        {name} {golem_assist}
+    }
+    {3} 
+    {
+        {active} {1}
+        {name} {summon_mf}
+    }
+    {4} 
+    {
+        {active} {1}
+        {name} {spelltap}
+    }
+    {5} 
+    {
+        {active} {1}
+        {name} {gstrength}
+    }
+    {6} 
+    {
+        {active} {1}
+        {name} {shoosummons}
+    }
+    {7} 
+    {
+        {active} {1}
+        {name} {rolm}
+    }
+    {8} 
+    {
+        {active} {1}
+        {name} {epowers}
     }
 }
 #VARIABLE {xtheme}
@@ -640,6 +600,7 @@
     {
         {auction} {<cea>}
         {gjugg} {<cfb>}
+        {gline} {<dfd>}
         {hm} {<fad>}
         {party} {<ffb>}
     }
@@ -658,8 +619,7 @@
     {chatlog_says} {1}
     {corpse_echo} {0}
     {cult} {0}
-    {discord_post} {0}
-    {emote_aid} {1}
+    {discord_post} {1}
     {emote_corpse} {1}
     {emote_dungeon_clear} {1}
     {emote_eheal} {1}

@@ -12,10 +12,13 @@
 #var slotC {};
 #var slotD {};
 #var currentcolor {};
-#kill var doorcombos;
-#list doorcombos {create};
-#list doorcombos {add} {blah1};
-#list doorcombos {add} {blah2};
+
+#if {"${doorcombos}" === ""} {
+	#kill var doorcombos;
+	#list doorcombos {create};
+	#list doorcombos {add} {blah1};
+	#list doorcombos {add} {blah2};
+};
 
 #nop Actions;
 
@@ -156,8 +159,13 @@
     #list {doorcombos} {set} {$doornum} {a $slotA, b $slotB, c $slotC, d $slotD};
 
     #echo {Door code: $slotA, $slotB, $slotC, $slotD};
-    #echo {Door combo for room $doornum saved.
-Use "fdkey" to unlock door in future visits.};
+    #echo {Door combo for room $doornum saved. Use "fdkey" to unlock door in future visits.};
+
+	#class bootVars open;
+	#variable xdoorcombos $doorcombos;
+	#class bootVars close;
+
+	_bootVar_export;
 
     enter a $slotA, b $slotB, c $slotC, d $slotD;
    };
