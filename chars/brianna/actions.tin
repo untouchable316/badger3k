@@ -21,7 +21,7 @@
 #action {The computer chirps 'FStrm Lrm 20 ammo supplies exhausted.'} {#if {!$idle_flag} {truck ammo vbuy missile 10 1 40000}};
 
 #NOP -- JUGGERNAUT CDEFEND FOR PARTY
-#action {The computer chirps 'Switching to PARTY defense mode.'} {ptell cdefend for party accept badger let the FURRY FURR BALL DIE!! :P.}
+#NOP -- #action {The computer chirps 'Switching to PARTY defense mode.'} {ptell cdefend for party accept badger let the FURRY FURR BALL DIE!! :P.}
 
 #NOP --- GENERAL MISC;
 #action {The gem is now 100% full.} {smuggle gem};
