@@ -149,6 +149,7 @@
     #var xgags $gags;
     #var xmy $my;
     #var xwhitelist $whitelist;
+    #var xdungeon $dungeon;
     #NOP -- Chat blacklist (list) for MIP chat window;
     #list xblacklist copy blacklist;
     #var xchat[log][emotes] $chat[log][emotes];
@@ -193,6 +194,7 @@
     #var spiceBeers $xspiceBeers;
     #var major_prof $xmajor_prof;
     
+    #var dungeon $xdungeon;
     #var lastBot $xlastBot;
     #var theme $xtheme;
     #var gags $xgags;
@@ -240,6 +242,7 @@
     #var toggles[discord_post] $discordPost;
     #if {"$deadmanTimeoutActions" == "$xdeadmanTimeoutActions"} {#list deadmanTimeoutActions clear};
     #if {"$major_prof" == "$xmajor_prof"} {#var major_prof {}};
+    #if {"$dungeon" == "$xdungeon"} {#var dungeon {}};
 
     #if {"$guild" == "knight"} {
         #var battlecry $xbattlecry;
@@ -341,6 +344,10 @@
         };
     };
 
+    #alias .gxp_total_add {
+        #format my[gxp][current_gxp] {%d} $my[fremen][gxp][total];
+    };
+
     #alias reset_gxp {
         #var my[gxp][hour] 0;
         #var my[gxp][total] 0;
@@ -348,7 +355,17 @@
         #var my[gxp][average] 0;
         #var my[gxp][rounds_tracked] 0;
         #var my[gxp][starting_round] $total_rounds;
+        #var my[gxp][t30] {};
         #format {my[gxp][start-time]} {%T} {};
+        
+        #switch {"$guild"} {
+            #case {"fremen"} {
+                #format my[gxp][starting_gxp] {%d} $my[fremen][gxp][total];
+            };
+            #default {
+                #var my[gxp][starting_gxp] 0;
+            };
+        };
     };
     #delay 10 {reset_gxp};
 };
